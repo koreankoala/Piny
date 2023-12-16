@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello</title>
+</head>
+<body>
+  <div style="display: flex; flex-wrap: wrap;">
+    <video id="videoInput1" style="display:none"></video>
+    <canvas id="videoOutput1"></canvas>
+
+    <video id="videoInput2" style="display:none"></video>
+    <canvas id="videoOutput2"></canvas>
+
+    <video id="videoInput3" style="display:none"></video>
+    <canvas id="videoOutput3"></canvas>
+
+    <video id="videoInput4" style="display:none"></video>
+    <canvas id="videoOutput4"></canvas>
+
+    <video id="videoInput5" style="display:none"></video>
+    <canvas id="videoOutput5"></canvas>
+
+    <video id="videoInput6" style="display:none"></video>
+    <canvas id="videoOutput6"></canvas>
+  </div>
+
+  <button onclick="startStreaming()">Send</button>
+
+  <script>
+    var w = 620, h = 440; // Adjust dimensions as needed
+    var url = "ws://localhost:3000";
+
+    var ws1 = new WebSocket(url);
+    var ws2 = new WebSocket(url);
+    var ws3 = new WebSocket(url);
+    var ws4 = new WebSocket(url);
+    var ws5 = new WebSocket(url);
+    var ws6 = new WebSocket(url);
+
+    var video1 = setupVideo("videoInput1", "videoOutput1");
+    var video2 = setupVideo("videoInput2", "videoOutput2");
+    var video3 = setupVideo("videoInput3", "videoOutput3");
+    var video4 = setupVideo("videoInput4", "videoOutput4");
+    var video5 = setupVideo("videoInput5", "videoOutput5");
+    var video6 = setupVideo("videoInput6", "videoOutput6");
+
+    function setupVideo(videoId, canvasId) {
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+      var constraints = { audio: false, video: true };
+      var video = document.getElementById(videoId);
+      video.width = w;
+      video.height = h;
+
+      function successCallback(stream) {
+        video.srcObject = stream;
+        video.play();
+      }
+
+      function errorCallback(error) {
+        console.log(error);
+      }
+
+      navigator.getUserMedia(constraints, successCallback, errorCallback);
+
+      var canvas = document.getElementById(canvasId);
+      canvas.width = w;
+      canvas.height = h;
+      var ctx = canvas.getContext("2d");
+
+      function processImage() {
+        ctx.drawImage(video, 0, 0, w, h);
+        setTimeout(processImage, 1);
+      }
+
+      processImage();
+
+      return video;
+    }
+
+    function startStreaming() {
+      setInterval(function () {
+        sendImage(ws1, "videoOutput1");
+        sendImage(ws2, "videoOutput2");
+        sendImage(ws3, "videoOutput3");
+        sendImage(ws4, "videoOutput4");
+      }, 30);
+    }
+
+    function sendImage(ws, canvasId) {
+      var canvas = document.getElementById(canvasId);
+      var rawData = canvas.toDataURL("image/jpeg", 0.5);
+      ws.send(rawData);
+    }
+  </script>
+</body>
+</html>

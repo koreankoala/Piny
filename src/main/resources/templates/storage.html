@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- MATERIAL CON -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- STYLESHEET -->
+    <link rel="stylesheet" href="../css/storage.css">
+</head>
+<body>
+     <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <a href="/service"><img src="../images/logo.png">
+                    <h2>PINY<span class="danger"> Catch U</span></h2></a>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">close</span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a class="menu-item active">
+                    <span class="material-icons-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">person_outline</span>
+                    <h3>Profile</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">view_list</span>
+                    <h3>Video List</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">insights</span>
+                    <h3>Analytics</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">mail_outline</span>
+                    <h3>Messages</h3>
+                    <span class="message-count active">26</span>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">inventory</span>
+                    <h3>Statu</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">help_outline</span>
+                    <h3>FAQ</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">settings</span>
+                    <h3>Settings</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">add</span>
+                    <h3>Add Product</h3>
+                </a>
+                <a>
+                    <span class="material-icons-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- ------------ END OF ASIDE ------------ -->
+        <main>
+            <div class="header-wrapper">
+                <div class="header-title">
+                    <h1>Video List</h1>
+                </div>
+                <div class="search-box">
+                    <span class="material-icons-sharp">search</span>
+                    <input type="text" placeholder="Search">
+                </div>
+                <div class="user-info">
+                    <button id="menu-btn">
+                        <span class="material-icons-sharp">menu</span>
+                    </button>
+                    <div class="theme-toggler">
+                        <span class="material-icons-sharp active">light_mode</span>
+                        <span class="material-icons-sharp">dark_mode</span>
+                    </div>
+                    <div class="profile">
+                        <div class="info">
+                            <p>Hey, <b>김철수</b></p>
+                            <small class="text-muted">Admin</small>
+                        </div>
+                        <div class="profile-photo">
+                            <img src="../images/profile2.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="card-container">
+                <h3 class="main-title">Today's data</h3>
+                <div class="card-wrapper">
+                    <div class="payment-card">
+                        <div class="card-header">
+                            <div class="amount">
+                                <span class="title">Payment amount</span>
+                                <span class="amount-value">$500.00</span>
+                            </div>
+                            <span class="material-icons-sharp">paid</span>
+                            <span class="card-detail">**** **** 3484</span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="recent-video">
+                <h2>영상 증거물 업데이트</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>기록 번호</th>
+                            <th>CCTV 번호</th>
+                            <th>금연구역명</th>
+                            <th>감지 일시</th>
+                            <th>확인 여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>99</td>
+                            <td>85631</td>
+                            <td>노량진역</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
+                        </tr>
+                        <tr>
+                            <td>98</td>
+                            <td>85632</td>
+                            <td>드림 지역아동센터</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
+                        </tr>
+                        <tr>
+                            <td>97</td>
+                            <td>85633</td>
+                            <td>현대오일뱅크(주)직영 스피드주유소</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
+                        </tr>
+                        <tr>
+                            <td>96</td>
+                            <td>85634</td>
+                            <td>마로니에어린이공원</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                        <tr>
+                            <td>95</td>
+                            <td>85635</td>
+                            <td>보라매공원입구</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                        <tr>
+                            <td>94</td>
+                            <td>85635</td>
+                            <td>보라매공원입구</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                        <tr>
+                            <td>93</td>
+                            <td>85635</td>
+                            <td>보라매공원입구</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                        <tr>
+                            <td>92</td>
+                            <td>85635</td>
+                            <td>보라매공원입구</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                        <tr>
+                            <td>91</td>
+                            <td>85635</td>
+                            <td>보라매공원입구</td>
+                            <td>2023-12-13</td>
+                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#">Show All</a>
+            </div>
+        </main>
+        
+            
+     </div>
+
+     <script src="../js/index.js"></script>
+</body>
+</html>
