@@ -1,8 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
@@ -15,7 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-     <div class="container">
+    <div class="container">
         <aside>
             <div class="top">
                 <div class="logo">
@@ -139,7 +136,6 @@
                 <!-- ------------ END OF INCOME ------------ -->
             </div>
             <!-- ------------ END OF INSIGHTS ------------ -->
-
             <div class="recent-video">
                 <h2>영상 증거물 업데이트</h2>
                 <table>
@@ -153,43 +149,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                    	<c:forEach items="${result_storage }" var="s">
-	                        <tr>
-	                            <td>${s.idx }</td>
-	                            <td>${s.cctv_port }</td>
-	                            <td>${s.section }</td>
-	                            <td>${s.record_start }</td>
-	                            <!-- <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td> -->
-	                        </tr>
-                        </c:forEach>
-                        <!-- <tr>
-                            <td>98</td>
-                            <td>85632</td>
-                            <td>드림 지역아동센터</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
+                    	<tr th:each="s : ${session.result_storage}">
+                            <td th:text="${s.idx}">Index</td>
+                            <td th:text="${s.cctv_port}">CCTV Port</td>
+                            <td th:text="${s.section}">Section</td>
+                            <td th:text="${s.record_start}">Record Start</td>
+                            <!-- <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td> -->
                         </tr>
-                        <tr>
-                            <td>97</td>
-                            <td>85633</td>
-                            <td>현대오일뱅크(주)직영 스피드주유소</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
-                        </tr>
-                        <tr>
-                            <td>96</td>
-                            <td>85634</td>
-                            <td>마로니에어린이공원</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>95</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr> -->
+                        
                     </tbody>
                 </table>
                 <a href="#">Show All</a>
@@ -211,8 +178,8 @@
                 </div>
                 <div class="profile">
                     <div class="info">
-                        <p>Hey, <b>${loginMember.id }</b></p>
-                        <small class="text-muted">${loginMember.email }</small>
+                        <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
+                        <small class="text-muted" th:text="${session.loginMember.email}"></small>
                     </div>
                     <div class="profile-photo">
                         <img src="../images/profile2.jpg" alt="">
@@ -252,7 +219,6 @@
                     </div>
                 </div>
             </div>
-            <!-- ------------ END OF RECENT UPDATES ------------ -->
             <table class="scriptCalendar">
                 <thead>
                     <tr>
@@ -270,21 +236,6 @@
                 <tbody></tbody>
             </table>
         </div>
-        <table>
-        	<tbody>
-        		<c:forEach items="${result_storage }" var="s">
-        		<tr>
-        			<td>${s.video_path }</td>
-        		</tr>
-				<tr>
-        			<td>${s.record_start }</td>
-        		</tr>
-        		<tr>
-        			<td>${s.record_end }</td>
-        		</tr>
-        		</c:forEach>
-        	</tbody>
-        </table>
      </div>
 
      <script src="../js/main.js"></script>

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Storage;
 import com.example.demo.Mapper.MemberMapper;
+import com.example.demo.java.GoogleEmailService;
+import com.example.demo.java.NaverEmailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -29,7 +31,7 @@ import jakarta.servlet.http.HttpSession;
 	}
 
     @PostMapping("/main")
-	public String login(Member member, HttpSession session) {
+	public String login(Member member, HttpSession session, Model model) {
 		
 		Member result = mapper.login(member);
 		
@@ -38,19 +40,43 @@ import jakarta.servlet.http.HttpSession;
 			return "redirect:/"; // 로그인 페이지로 다시 이동
 		} else {
 			session.setAttribute("loginMember", result); // 세션에 로그인한 계정의 정보를 저장, 해당 정보는 session.invalidate()나 브라우저를 종료하기 전까지 유효함
-			Member loginMember = (Member)session.getAttribute("loginMember"); // boardcontent.jsp에서 로그인한 사용자 정보를 사용해야 함
+			Member loginMember = (Member)session.getAttribute("loginMember");
 			String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
 			System.out.println(memberId);
 			System.out.println(loginMember.getEmail().substring(loginMember.getEmail().length()-9));
 			
-			
 			List<Storage> result_storage = mapper.videoList(memberId);
 			session.setAttribute("result_storage", result_storage);
-			
 			return "main";
 		
 			}
 
+	}
+
+    @PostMapping("/sendemail")
+	public String sendEmail(HttpSession session) {
+		
+		Member member = (Member)session.getAttribute("loginMember");
+		
+        String to = member.getEmail();
+        String subject = member.getId();
+        String text = member.getPw();
+        
+        if(to.substring(to.length()-9).equals("naver.com")) {
+    		
+    		NaverEmailService.sendEmail(to, subject, text);
+    		
+    		return "main";
+    		
+        } else if(to.substring(to.length()-9).equals("gmail.com")) {
+    		
+    		GoogleEmailService.sendEmail(to, subject, text);
+    		
+    		return "main";
+        }
+        
+        return null;
+		
 	}
 
         @GetMapping(value="/service")
