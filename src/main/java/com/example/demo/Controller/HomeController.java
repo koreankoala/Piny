@@ -15,7 +15,7 @@ import com.example.demo.Mapper.MemberMapper;
 import jakarta.servlet.http.HttpSession;
 
 
-    // 1차 테스트
+    // 1차 테스트5444
     @Controller
     public class HomeController{
 
