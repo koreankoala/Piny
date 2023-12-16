@@ -11,10 +11,8 @@ public class Storage {
 	
 	private int idx;
 	private String id;
-	private String cctv_port;
 	private String record_start;
 	private String record_end;
 	private String video_path;
-	private String section;
 	
 }

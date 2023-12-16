@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage</title>
+    <!-- MATERIAL CON -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <!-- STYLESHEET -->
+    <link rel="stylesheet" href="../css/mypage.css">
+</head>
+<body>
+     <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="./images/logo.png">
+                    <h2>PINY<span> Catch U</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">close</span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a class="menu-item" href="main">
+                    <span class="material-icons-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a class="menu-item active" href="/mypage">
+                    <span class="material-icons-sharp">person_outline</span>
+                    <h3>My page</h3>
+                </a>
+                <a class="menu-item"  href="/videotest3">
+                    <span class="material-icons-sharp">videocam</span>
+                    <h3>Video Streaming</h3>
+                </a>
+                <a class="menu-item"  href="/storage">
+                    <span class="material-icons-sharp">view_list</span>
+                    <h3>Video List</h3>
+                    <span class="message-count active">26</span>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">mail_outline</span>
+                    <h3>Messages</h3>
+                </a>
+                <a class="menu-item">
+                    <span class="material-icons-sharp">insights</span>
+                    <h3>Analytics</h3>
+                </a>
+                <a>
+                    <span class="material-icons-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- ------------ header ------------ -->
+        <main>
+            <div class="header-wrapper">
+                <div class="header-title">
+                    <h1>My Page</h1>
+                </div>
+                <div class="user-info">
+                    <button id="menu-btn">
+                        <span class="material-icons-sharp">menu</span>
+                    </button>
+                    <div class="theme-toggler">
+                        <span class="material-icons-sharp active">light_mode</span>
+                        <span class="material-icons-sharp">dark_mode</span>
+                    </div>
+                    <div class="profile">
+                        <div class="info">
+                            <p>Hey, <b>김철수</b></p>
+                            <small class="text-muted">Admin</small>
+                        </div>
+                        <div class="profile-photo">
+                            <img src="./images/profile2.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ------------ main ------------ -->
+            <div class="imformation-update">
+                <h2 class="primary">회원정보 수정</h2>
+                <p>기본정보</p>
+                <table>
+                    <tr>
+                        <th>아이디</th>
+                        <td><input type="text" name="pw" placeholder="user"></td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호</th>
+                        <td><input type="text" name="pw" placeholder="*************"></td>
+                    <tr>
+                        <th>이메일</th>
+                        <td><input type="text" name="pw" placeholder="*******@gamil.com"></td>
+                    </tr>
+                    <tr>
+                        <th>수신 동의</th>
+                        <td><input type="radio" name="alram" value="email">이메일</td>
+                    </tr>
+                    <tr>
+                        <th>개인정보 수집 및 이용안내</th>
+                        <td><input type="radio" name="information" value="accept">동의 <input type="radio" name="information" value="reject">비동의</td>
+                    </tr>
+                </table>
+                <div class="btn">
+                    <button type="submit">제출하기</button>
+                    <button type="reset">다시하기</button>
+                </div>
+            </div>
+            
+            
+        </main>
+        
+            
+     </div>
+
+     <script src="../js/main.js"></script>
+</body>
+</html>
+<!-- 수현1차 -->
