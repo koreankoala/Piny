@@ -16,7 +16,7 @@
             <div class="top">
                 <div class="logo">
                     <img src="./images/logo.png">
-                    <h2>PINY<span> Catch U</span></h2>
+                    <h2>PINY<span class="danger"> Catch U</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">close</span>
@@ -71,8 +71,8 @@
                     </div>
                     <div class="profile">
                         <div class="info">
-                            <p>Hey, <b>김철수</b></p>
-                            <small class="text-muted">Admin</small>
+                            <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
+                            <small class="text-muted" th:text="${session.loginMember.email}"></small>
                         </div>
                         <div class="profile-photo">
                             <img src="./images/profile2.jpg" alt="">

@@ -28,7 +28,7 @@
                     <span class="material-icons-sharp">grid_view</span>
                     <h3>Dashboard</h3>
                 </a>
-                <a class="menu-item active" href="/mypage">
+                <a class="menu-item" href="/mypage">
                     <span class="material-icons-sharp">person_outline</span>
                     <h3>My page</h3>
                 </a>
@@ -36,7 +36,7 @@
                     <span class="material-icons-sharp">videocam</span>
                     <h3>Video Streaming</h3>
                 </a>
-                <a class="menu-item"  href="/storage">
+                <a class="menu-item active"  href="/storage">
                     <span class="material-icons-sharp">view_list</span>
                     <h3>Video List</h3>
                     <span class="message-count active">26</span>
@@ -75,8 +75,8 @@
                     </div>
                     <div class="profile">
                         <div class="info">
-                            <p>Hey, <b>김철수</b></p>
-                            <small class="text-muted">Admin</small>
+                            <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
+                            <small class="text-muted" th:text="${session.loginMember.email}"></small>
                         </div>
                         <div class="profile-photo">
                             <img src="../images/profile2.jpg" alt="">

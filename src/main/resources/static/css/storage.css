@@ -217,10 +217,6 @@ aside .sidebar a:hover {
     color: var(--color-primary);
 }
 
-aside .sidebar a:hover span {
-    margin-left: 1rem;
-}
-
 aside .sidebar .message-count, aside .sidebar .message-count.active {
     background: var(--color-danger);
     color: var(--color-white);
