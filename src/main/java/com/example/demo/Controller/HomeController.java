@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.Entity.Member;
@@ -37,12 +38,16 @@ public class HomeController{
         
     }
 
-    @PostMapping("/main")
+    @RequestMapping("/main")
     public String login(Member member, HttpSession session) {
-        
+
+        if(session.getAttribute("loginMember") != null ){
+            return "main";
+        }
+
         Member result = mapper.login(member);
-    
-        if(result == null) { // Uesr에 입력한 회원 정보가 없어 로그인에 실패
+
+        if(result == null) { // User에 입력한 회원 정보가 없어 로그인에 실패
             System.out.println("로그인 실패");
             return "redirect:/"; // 로그인 페이지로 다시 이동
         } else {
@@ -59,6 +64,15 @@ public class HomeController{
 
     }
 
+    @GetMapping("/logout")
+	public String logout(HttpSession session) {
+
+		session.invalidate(); // 세션에 저장된 정보를 날림(세션에 로그인한 계정 정보를 날림으로 로그아웃)
+		
+		return "redirect:/";
+		
+	}
+
     @PostMapping("/join")
     public String join(@ModelAttribute Member member) {
 
@@ -69,12 +83,12 @@ public class HomeController{
         }
 
         try {
-            mapper.join(member); // 입력한 회원 정보를 t_user 테이블에 삽입
+            mapper.join(member); // 입력한 회원 정보를 User 테이블에 삽입
             
             System.out.println("회원가입 성공");
             System.out.println(member.getId());
             return "redirect:/";
-        } catch(DataIntegrityViolationException e) { // MySQL WorkBench에서는 PrimaryKey가 중복되어 user 테이블에 데이터를 삽입할 수 없으면 에러가 떠서 예외처리를 하였음
+        } catch(DataIntegrityViolationException e) { // MySQL WorkBench에서는 PrimaryKey가 중복되어 User 테이블에 데이터를 삽입할 수 없으면 에러가 떠서 예외처리를 하였음
             System.out.println("회원가입 실패");
             return "redirect:/"; // 회원가입에 실패하면 다시 회원가입 페이지로 이동
         }
@@ -145,11 +159,29 @@ public class HomeController{
         }
     }
 
+    @PostMapping("/idcheck")
+    public ResponseEntity<String> idcheck(HttpSession session, @RequestParam("id") String id) {
+        
+        int check = mapper.idCheck(id);
+
+        if(check == 0){
+            return ResponseEntity.ok("사용 가능한 아이디입니다.");
+        }else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("중복된 아이디입니다.");
+        }
+
+    }
+
 
     @GetMapping(value="/storage")
-    public String storage(Model model) {
+    public String storage(HttpSession session, Member member) {
         
-        return "storage";
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "storage";
+        }else{
+            return "redirect:/";
+        }
     }
 
     @GetMapping(value="/loading")
@@ -159,39 +191,69 @@ public class HomeController{
     }
 
     @GetMapping(value="/mypage")
-    public String mypage(Model model) {
-        
-        return "mypage";
+    public String mypage(HttpSession session, Member member) {
+
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "mypage";
+        }else{
+            return "redirect:/";
+        }
     }
     
     @GetMapping(value="/videosender")
-    public String video(Model model) {
-        
-        return "videosender";
+    public String video(HttpSession session, Member member) {
+
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "videosender";
+        }else{
+            return "redirect:/";
+        }
     }
     
     @GetMapping(value="/videosender4")
-    public String video4(Model model) {
-        
-        return "videosender4";
+    public String video4(HttpSession session, Member member) {
+
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "videosender4";
+        }else{
+            return "redirect:/";
+        }
     }
 
     @GetMapping(value="/videotest")
-    public String python(Model model) {
+    public String python(HttpSession session, Member member) {
         
-        return "videotest";
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "storage";
+        }else{
+            return "redirect:/";
+        }
     }
     
     @GetMapping(value="/videotest2")
-    public String python2(Model model) {
+    public String python2(HttpSession session, Member member) {
         
-        return "videotest2";
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "storage";
+        }else{
+            return "redirect:/";
+        }
     }
 
     @GetMapping(value="/videotest3")
-    public String python3(Model model) {
+    public String python3(HttpSession session, Member member) {
         
-        return "videotest3";
+        member = (Member)session.getAttribute("loginMember");
+        if(member != null){
+            return "storage";
+        }else{
+            return "redirect:/";
+        }
     }
     
     

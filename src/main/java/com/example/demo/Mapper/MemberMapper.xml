@@ -6,4 +6,6 @@
 	<insert id="join" parameterType="com.example.demo.Entity.Member">insert into User(ID,PW,Email) values(#{id},#{pw},#{email})</insert>
 	
 	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId})</select>
+
+	<select id="idCheck" parameterType="String" resultType="Integer">select count(*) from User where ID = #{id}</select>
 </mapper>

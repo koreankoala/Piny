@@ -16,4 +16,6 @@ public interface MemberMapper {
 	
 	public List<Storage> videoList(String memberId);
 
+	public int idCheck(String id);
+
 }
