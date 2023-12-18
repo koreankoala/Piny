@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <!-- STYLESHEET -->
     <link rel="stylesheet" href="../css/login.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="contrainer">
@@ -54,17 +55,17 @@
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                        <input type="email" name="email" required placeholder="Email" autocomplete="off">
-                        <button>인증번호 전송</button>
+                        <input type="email" name="email" id="email" required placeholder="Email" autocomplete="off">
+                        <button type="button" id="sendAuthenticationButton">인증번호 전송</button>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                        <input type="text" name="emailcheck" required placeholder="인증번호" autocomplete="off">
-                        <button id="sendEmailButton">인증번호 확인</button>
+                        <input type="text" name="authentication" id="authentication" placeholder="이메일을 확인하고 인증번호를 입력하세요" autocomplete="off">
+                        <button type="button" id="checkAuthenticationButton">인증번호 확인</button>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" name="pw" required placeholder="Password">
+                        <input type="password" name="pw" placeholder="Password">
                     </div>
                     <button type="submit" class="btn">Register</button>
                     <div class="login-register">
@@ -76,5 +77,51 @@
     </div>
     <script src="../js/login.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script>
+	    $(document).ready(function() {
+	        $('#sendAuthenticationButton').click(function(event) {
+	            //event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
+                var userEmail = document.getElementById('email').value;
+	
+	            // AJAX 요청
+	            $.ajax({
+	                url: '/sendauthentication', // 이메일 전송을 처리하는 URL
+                    data: { email: userEmail },
+	                type: 'POST', // 전송 방식 (POST)
+	                success: function(response) {
+	                    alert('인증번호를 발송했습니다.');
+	                    // 성공 시 수행할 작업 추가
+	                },
+	                error: function(xhr, status, error) {
+	                    alert('인증번호 발송 실패');
+	                    // 실패 시 수행할 작업 추가
+	                }
+	            });
+	        });
+	    });
+	</script>
+    <script>
+	    $(document).ready(function() {
+	        $('#checkAuthenticationButton').click(function(event) {
+	            //event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
+                var userAuthentication = document.getElementById('authentication').value;
+	
+	            // AJAX 요청
+	            $.ajax({
+	                url: '/checkauthentication', // 이메일 전송을 처리하는 URL
+                    data: { authentication: userAuthentication },
+	                type: 'POST', // 전송 방식 (POST)
+	                success: function(response) {
+	                    alert(response);
+	                    // 성공 시 수행할 작업 추가
+	                },
+	                error: function(xhr, status, error) {
+	                    alert('인증번호를 다시 확인하세요.');
+	                    // 실패 시 수행할 작업 추가
+	                }
+	            });
+	        });
+	    });
+	</script>
 </body>
 </html>

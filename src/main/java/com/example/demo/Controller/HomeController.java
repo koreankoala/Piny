@@ -4,19 +4,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Storage;
 import com.example.demo.Mapper.MemberMapper;
 import com.example.demo.java.GoogleEmailService;
+import com.example.demo.java.NaverAuthenticationService;
 import com.example.demo.java.NaverEmailService;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.Random;
 
 
 @Controller
@@ -57,6 +62,12 @@ public class HomeController{
     @PostMapping("/join")
     public String join(@ModelAttribute Member member) {
 
+        String pw = member.getPw();
+        if(pw.equals("")){
+            System.out.println("비밀번호 미입력");
+            return "redirect:/";
+        }
+
         try {
             mapper.join(member); // 입력한 회원 정보를 t_user 테이블에 삽입
             
@@ -95,6 +106,45 @@ public class HomeController{
         return null;
         
     }
+
+    @PostMapping("/sendauthentication")
+    public String sendAuthentication(HttpSession session, @RequestParam("email") String email) {
+        
+        Random rand = new Random();
+        int auth = rand.nextInt(900000)+100000; // 0 <= auth < 10
+        String auth_String = Integer.toString(auth);
+        System.out.println(auth_String);
+        session.setAttribute("auth", auth_String);
+
+        String to = email;
+        
+        if(to.substring(to.length()-9).equals("naver.com")) {
+            
+            NaverAuthenticationService.sendEmail(to, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
+            
+            return "login";
+            
+        } else if(to.substring(to.length()-9).equals("gmail.com")) {
+            
+            GoogleEmailService.sendEmail(to, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
+            
+            return "login";
+        }
+        
+        return null;
+        
+    }
+
+    @PostMapping("/checkauthentication")
+    public ResponseEntity<String> checkAuthentication(HttpSession session, @RequestParam("authentication") String authentication) {
+        String auth = (String) session.getAttribute("auth");
+        if (auth != null && auth.equals(authentication)) {
+            return ResponseEntity.ok("인증이 완료되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("불일치");
+        }
+    }
+
 
     @GetMapping(value="/storage")
     public String storage(Model model) {
