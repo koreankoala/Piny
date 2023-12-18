@@ -122,7 +122,7 @@ public class HomeController{
     }
 
     @PostMapping("/sendauthentication")
-    public String sendAuthentication(HttpSession session, @RequestParam("email") String email) {
+    public String sendAuthentication(HttpSession session, @RequestParam("email") String email, @RequestParam("domain") String domain) {
         
         Random rand = new Random();
         int auth = rand.nextInt(900000)+100000; // 0 <= auth < 10
@@ -132,19 +132,17 @@ public class HomeController{
 
         String to = email;
         
-        if(to.substring(to.length()-9).equals("naver.com")) {
-            
-            NaverAuthenticationService.sendEmail(to, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
+        if(domain.equals("@naver.com")) {
+            NaverAuthenticationService.sendEmail(to+domain, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
             
             return "login";
             
-        } else if(to.substring(to.length()-9).equals("gmail.com")) {
+        } else if(domain.equals("@gmail.com")) {
             
-            GoogleEmailService.sendEmail(to, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
+            GoogleEmailService.sendEmail(to+domain, "인증번호", "인증번호 "+auth_String+" 을(를) 입력하세요.");
             
             return "login";
         }
-        
         return null;
         
     }

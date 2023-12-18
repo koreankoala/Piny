@@ -29,48 +29,55 @@
             </span>
     
             <div class="form-box login">
-                <h2>Login</h2>
+                <h2>로그인</h2>
                 <form action="/main" method="post">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person"></ion-icon></span>
-                        <input type="text" name="id" required placeholder="ID" autocomplete="off">
+                        <input type="text" name="id" required placeholder="아이디" autocomplete="off">
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" name="pw" required placeholder="Password">
+                        <input type="password" name="pw" required placeholder="패스워드">
                     </div>
-                    <button type="submit" class="btn">Login</button>
+                    <button type="submit" class="btn">로그인</button>
                     <div class="login-register">
-                        <p>Don't have an account?<a href="#" class="register-link">Register</a></p>
+                        <p>계정이 없으신가요? <a href="#" class="register-link" style="text-decoration-line: underline;">회원가입</a></p>
                     </div>
                 </form>
             </div>
     
             <div class="form-box register">
-                <h2>Registration</h2>
+                <h2>회원가입</h2>
                 <form action="/join" method="post">
                     <div class="input-box">
                         <span class="icon"><ion-icon name="person"></ion-icon></ion-icon></span>
-                        <input type="text" name="id" id="id" required placeholder="ID" autocomplete="off">
-                        <button type="button" id="idCheckButton">아이디 중복 확인</button>
+                        <input type="text" name="id" id="id" required placeholder="아이디" autocomplete="off">
+                        <button type="button" id="idCheckButton">중복 확인</button>
+                    </div>
+                    <div class="input-box">
+                        <div id="email-box">
+                            <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                            <input type="email" name="email" id="email" required placeholder="이메일" autocomplete="off">
+                            <span class="email-icon">@</span>
+                            <select class="box" id="domain_list">
+                                <option value="@naver.com">naver.com</option>
+                                <option value="@google.com">google.com</option>
+                            </select>
+                            <button type="button" id="sendAuthenticationButton">인증번호 전송</button>
+                        </div>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                        <input type="email" name="email" id="email" required placeholder="Email" autocomplete="off">
-                        <button type="button" id="sendAuthenticationButton">인증번호 전송</button>
-                    </div>
-                    <div class="input-box">
-                        <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                        <input type="text" name="authentication" id="authentication" required placeholder="이메일을 확인하고 인증번호를 입력하세요" autocomplete="off">
+                        <input type="text" name="authentication" id="authentication" required placeholder="이메일 확인 후 인증번호 입력" autocomplete="off">
                         <button type="button" id="checkAuthenticationButton">인증번호 확인</button>
                     </div>
                     <div class="input-box">
                         <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                        <input type="password" name="pw" required placeholder="Password">
+                        <input type="password" name="pw" required placeholder="패스워드">
                     </div>
-                    <button type="submit" id="register" class="btn">Register</button>
+                    <button type="submit" id="register" class="btn">회원가입</button>
                     <div class="login-register">
-                        <p>Already have an account?<a href="#" class="login-link">Login</a></p>
+                        <p>이미 계정을 가지고 계신가요? <a href="#" class="login-link" style="text-decoration-line: underline;">로그인</a></p>
                     </div>
                 </form>
             </div>
@@ -80,6 +87,8 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script>
         document.getElementById("register").disabled = true;
+        document.getElementById("register").classList.add("disabledButton1");
+        document.getElementById("register").classList.add("disabledButton2");
 
 	    $(document).ready(function() {
 	        $('#idCheckButton').click(function(event) {
@@ -92,7 +101,8 @@
                     data: { id: userId },
 	                type: 'POST', // 전송 방식 (POST)
 	                success: function(response) {
-	                    alert('사용 가능한 아이디입니다.');
+	                    alert('사용 가능한 아이디입니다. 아이디 변경 시 변경한 아이디에 대한 중복 확인을 다시 진행해주세요.');
+                        document.getElementById("register").classList.remove("disabledButton1");
 	                    // 성공 시 수행할 작업 추가
 	                },
 	                error: function(xhr, status, error) {
@@ -102,19 +112,21 @@
 	            });
 	        });
 	    });
-	</script>
-    <script>
-        document.getElementById("register").disabled = true;
 
 	    $(document).ready(function() {
 	        $('#sendAuthenticationButton').click(function(event) {
 	            //event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
                 var userEmail = document.getElementById('email').value;
+                var domainList = document.getElementById('domain_list').value;
+                console.log(domainList);
 	
 	            // AJAX 요청
 	            $.ajax({
 	                url: '/sendauthentication', // 이메일 전송을 처리하는 URL
-                    data: { email: userEmail },
+                    data: {
+                        email: userEmail,
+                        domain: domainList,
+                    },
 	                type: 'POST', // 전송 방식 (POST)
 	                success: function(response) {
 	                    alert('인증번호를 발송했습니다.');
@@ -127,10 +139,6 @@
 	            });
 	        });
 	    });
-	</script>
-    <script>
-        document.getElementById("register").disabled = true;
-        document.getElementById("register").classList.add("disabledButton");
 
 	    $(document).ready(function() {
 	        $('#checkAuthenticationButton').click(function(event) {
@@ -139,13 +147,12 @@
 	
 	            // AJAX 요청
 	            $.ajax({
-	                url: '/checkauthentication', // 이메일 전송을 처리하는 URL
+	                url: '/checkauthentication', // 인증번호를 비교하는 URL
                     data: { authentication: userAuthentication },
 	                type: 'POST', // 전송 방식 (POST)
 	                success: function(response) {
 	                    alert(response);
-                        document.getElementById("register").disabled=false;
-                        document.getElementById("register").classList.remove("disabledButton");
+                        document.getElementById("register").classList.remove("disabledButton2");
 	                    // 성공 시 수행할 작업 추가
 	                },
 	                error: function(xhr, status, error) {
@@ -155,6 +162,19 @@
 	            });
 	        });
 	    });
+        
+        // 두 클래스가 모두 없을 때 disabled 속성을 변경하는 함수
+        function toggleDisabled() {
+            if (!document.getElementById("register").classList.contains('disabledButton1') && !document.getElementById("register").classList.contains('disabledButton2')) {
+                document.getElementById("register").disabled = false; // ID 중복 체크와 인증 절차 통과 시 회원가입 가능
+            } else {
+                document.getElementById("register").disabled = true; // ID 중복 체크와 인증 절차 중 어느 하나라도 하지 않으면 회원가입 불가능
+            }
+        }
+
+        // 일정 시간마다 클래스 확인하여 속성 변경
+        setInterval(toggleDisabled, 1); // 0.001초마다 요소의 클래스 확인
+
 	</script>
 </body>
 </html>
