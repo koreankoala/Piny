@@ -118,6 +118,7 @@ public class HomeController {
             GoogleEmailService.sendEmail(to, subject, text);
 
             return "main";
+            
         }
 
         return null;
