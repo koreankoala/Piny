@@ -207,7 +207,7 @@ function calendarChoiceDay(column) {
         
         // @see 금일인 경우
         if(document.getElementById("calMonth").innerText == autoLeftPad((nowDate.getMonth() + 1), 2) && document.getElementsByClassName("choiceDay")[0].innerText == autoLeftPad(toDay.getDate(), 2)) {
-            document.getElementsByClassName("choiceDay")[0].style.backgroundColor = "#FFFFE6";  
+            document.getElementsByClassName("choiceDay")[0].style.backgroundColor = "#FFFFE6";
         }
         
         // @see 금일이 아닌 경우
