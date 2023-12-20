@@ -18,4 +18,8 @@ public interface MemberMapper {
 
 	public int idCheck(String id);
 
+	public int savevid(String id, String record_start, String video_path);
+
+	public int updateConfirmed(String video_path);
+
 }

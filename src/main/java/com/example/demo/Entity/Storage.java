@@ -12,7 +12,7 @@ public class Storage {
 	private int idx;
 	private String id;
 	private String record_start;
-	private String record_end;
 	private String video_path;
-	
+	private int confirmed;
+
 }

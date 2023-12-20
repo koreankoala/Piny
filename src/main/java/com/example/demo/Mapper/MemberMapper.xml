@@ -5,7 +5,24 @@
 	
 	<insert id="join" parameterType="com.example.demo.Entity.Member">insert into User(ID,PW,Email) values(#{id},#{pw},#{email})</insert>
 	
-	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId})</select>
+	<!-- <select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId})</select> -->
 
 	<select id="idCheck" parameterType="String" resultType="Integer">select count(*) from User where ID = #{id}</select>
+
+	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY confirmed ASC, RECORD_START DESC</select>
+
+	<insert id="savevid" parameterType="String">INSERT INTO Storage(id, record_start, video_path)
+		SELECT #{id}, #{record_start}, #{video_path}
+		FROM dual
+		WHERE NOT EXISTS (
+			SELECT 1
+			FROM Storage
+			WHERE video_path = #{video_path}
+		)</insert>
+
+	<update id="updateConfirmed" parameterType="java.lang.String">
+		UPDATE Storage
+		SET confirmed = 1
+		WHERE video_path = #{video_path}
+	</update>
 </mapper>

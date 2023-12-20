@@ -114,68 +114,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>99</td>
+                        <tr th:each="storage : ${session.result_storage}">
+                            <td th:text="${storage.idx}">storage.idx</td>
                             <td>85631</td>
-                            <td>노량진역</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
-                        </tr>
-                        <tr>
-                            <td>98</td>
-                            <td>85632</td>
-                            <td>드림 지역아동센터</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
-                        </tr>
-                        <tr>
-                            <td>97</td>
-                            <td>85633</td>
-                            <td>현대오일뱅크(주)직영 스피드주유소</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td>
-                        </tr>
-                        <tr>
-                            <td>96</td>
-                            <td>85634</td>
-                            <td>마로니에어린이공원</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>95</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>94</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>93</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>92</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
-                        </tr>
-                        <tr>
-                            <td>91</td>
-                            <td>85635</td>
-                            <td>보라매공원입구</td>
-                            <td>2023-12-13</td>
-                            <td class="primary"><span class="material-icons-sharp">check_circle</span></td>
+                            <td><a href="#">노량진역</a></td>
+                            <td th:text="${storage.record_start}">storage.record_start</td>
+                            <td th:if="${storage.confirmed == 0}" class="primary"><i class="fa-sharp fa-solid fa-circle-xmark"></i><span th:text ="${storage.confirmed}" style="display: none;">storage.confirmed</span></td>
+                            <td th:if="${storage.confirmed == 1}"><i class="fa-solid fa-circle-check" style="color: #00ff7b;"></i></td>
+                            <td th:text = "${storage.video_path}" style="display: none;">storage.video_path</td>
+                            <td>
+                               <a th:href="'storage/' + ${storage.video_path}">Play Video</a>
+                                
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -185,7 +135,10 @@
         
             
      </div>
+     <script src="https://kit.fontawesome.com/f3aa567758.js" crossorigin="anonymous"></script>
 
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
      <script src="../js/index.js"></script>
 </body>
 </html>
