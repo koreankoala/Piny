@@ -1,0 +1,103 @@
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/chat.css" />
+    <title>WebSocket Chat</title>
+  </head>
+
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">Chat Room</div>
+      <div class="chat-body" id="chatBody">
+        <!-- Messages will be appended here dynamically using JavaScript -->
+      </div>
+      <div class="input-container">
+        <input
+          type="text"
+          class="input-box"
+          id="messageInput"
+          placeholder="Type your message..."
+        />
+        <button class="send-button" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // local host가 아니라 나의 컴퓨터의 ip주소를 입력해줘야 한다 
+      // chat2.html에서 바꿔주었더니 작동이 된다 
+      const webSocket = new WebSocket("ws://172.30.1.88:3001");
+
+      webSocket.onopen = function () {
+        const chatArea = document.getElementById("chatBody");
+        chatArea.innerHTML = "WebSocket connection established.";
+      };
+
+      webSocket.onmessage = function (event) {
+        appendOtherMessage(event.data);
+        updateChatScroll();
+      };
+
+      webSocket.onclose = function () {
+        const chatArea = document.getElementById("chatBody");
+        chatArea.innerHTML = "WebSocket connection closed.";
+      };
+
+      webSocket.onerror = function (error) {
+        console.error(error);
+      };
+
+      function sendMessage() {
+        var messageInput = document.getElementById("messageInput");
+        var message = messageInput.value.trim();
+        if (message !== "") {
+          appendUserMessage(message);
+          webSocket.send(message);
+          messageInput.value = "";
+          updateChatScroll();
+        }
+      }
+
+      function appendUserMessage(message) {
+        appendMessage("user-message", message);
+      }
+
+      function appendOtherMessage(message) {
+        appendMessage("other-message", message);
+      }
+
+      function appendMessage(className, message) {
+        const chatBody = document.getElementById("chatBody");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message " + className;
+
+        // Display the username
+        var usernameElement = document.createElement("div");
+        usernameElement.classList.add("username");
+        usernameElement.textContent = "Username"; // Replace with the actual username variable you have
+
+        var messageElement = document.createElement("div");
+        messageElement.classList.add(className);
+        messageElement.textContent = message;
+
+        messageDiv.appendChild(usernameElement);
+        messageDiv.appendChild(messageElement);
+
+        chatBody.appendChild(messageDiv);
+      }
+
+      function updateChatScroll() {
+        const chatArea = document.getElementById("chatBody");
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+    </script>
+
+    <!-- ../app.js -->
+    <!-- 서버에 연결 -->
+    <script src="../js/client.js"></script>
+  </body>
+</html>

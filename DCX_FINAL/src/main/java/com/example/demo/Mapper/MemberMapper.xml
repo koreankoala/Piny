@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.Mapper.MemberMapper">
+	<select id="login" parameterType="com.example.demo.Entity.Member" resultType="com.example.demo.Entity.Member">select * from User where ID=#{id} and PW=#{pw}</select>
+	
+	<insert id="join" parameterType="com.example.demo.Entity.Member">insert into User(ID,PW,Email) values(#{id},#{pw},#{email})</insert>
+	
+	<!-- <select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId})</select> -->
+
+	<select id="idCheck" parameterType="String" resultType="Integer">select count(*) from User where ID = #{id}</select>
+
+	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY confirmed ASC, RECORD_START DESC</select>
+	<select id="videoListtwo" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY RECORD_START DESC LIMIT 5</select>
+	<insert id="savevid" parameterType="String">INSERT INTO Storage(id, record_start, video_path)
+		SELECT #{id}, #{record_start}, #{video_path}
+		FROM dual
+		WHERE NOT EXISTS (
+			SELECT 1
+			FROM Storage
+			WHERE video_path = #{video_path}
+		)</insert>
+
+	<update id="updateConfirmed" parameterType="java.lang.String">
+		UPDATE Storage
+		SET confirmed = 1
+		WHERE video_path = #{video_path}
+	</update>
+</mapper>

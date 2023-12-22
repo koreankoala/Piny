@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- MATERIAL CON -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <!-- STYLESHEET -->
+
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/storage.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <style>
+
+
+
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align items to the start (top) */
+            /* margin: 20px; */
+            position: relative;
+            left: 940px;
+            bottom: 270px;
+            padding: 40px;
+            border-radius: 5px;
+            
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .legend-item div {
+            width: 15px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+       
+   
+    </style>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                  <a href = "/"><img src="../images/logo.png"></a>
+                    <h2>PINY<span class="danger"> Catch U</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">close</span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a class="menu-item" href="/main">
+                    <span class="material-icons-sharp">grid_view</span>
+                    <h3>Dashboard</h3>
+                </a>
+                <a class="menu-item" href="/mypage">
+                    <span class="material-icons-sharp">person_outline</span>
+                    <h3>My page</h3>
+                </a>
+                <a class="menu-item"  href="/video">
+                    <span class="material-icons-sharp">videocam</span>
+                    <h3>Video Streaming</h3>
+                </a>
+                <a class="menu-item"  href="/storage">
+                    <span class="material-icons-sharp">view_list</span>
+                    <h3>Video List</h3>
+                    <span class="message-count active">26</span>
+                </a>
+                
+                <a  href = "/analytics" class="menu-item active">
+                  <span class="material-symbols-sharp">public</span>
+                    <h3>No Smoking Map</h3>
+                </a>
+               
+                <a href="/logout">
+                    <span class="material-icons-sharp">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- ------------ END OF ASIDE ------------ -->
+        <main>
+
+            <div class="header-wrapper">
+                <div class="header-title">
+                  <h1>No Smoking Map</h1>
+                </div>
+                <div class="user-info">
+                  <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                  </button>
+                  <div class="theme-toggler">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                  </div>
+                  <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
+                        <small class="text-muted" th:text="${session.loginMember.email}"></small>
+                    </div>
+                    <div class="profile-photo">
+                      <img src="../images/profile2.jpg" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+           
+            <br>
+            
+            <iframe src="https://www.google.co.kr/maps/d/embed?mid=1yzdWIFxpGE6zvCh1JwHksyw-vE1saxo&amp;ehbc=2E312F" width="900" height="600"></iframe>
+            <div class = "legend_outside">
+            <div class="legend">
+                <div class="legend-item">
+                    <div><img src="../images/검정 담배.png"></div>
+                    <span>Fire caused by smoking</span>
+                </div>
+                <div class="legend-item">
+                    <div><img src="../images/빨강 담배.png"></div>
+                    <span>Smoking area</span>
+                </div>
+                <div class="legend-item">
+                    <div><img src="../images/파랑 담배.png"></div>
+                    <span>Seocho-gu smoking area</span>
+                </div>
+            </div>
+        </div>
+            
+               
+        </main>
+        <!-- ------------ END OF MAIN ------------ -->
+
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">menu</span>
+                </button>
+                <div class="theme-toggler">
+                    <span class="material-icons-sharp active">light_mode</span>
+                    <span class="material-icons-sharp">dark_mode</span>
+                </div>
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
+                        <small class="text-muted" th:text="${session.loginMember.email}"></small>
+                    </div>
+                    <div class="profile-photo">
+                        <!--<img src="../images/profile2.jpg" alt="">-->
+                    </div>
+                </div>
+            </div>
+            <!-- END OF TOP -->
+            <div class="recent-updates">
+               
+            </div>
+            <!-- END OF TOP -->
+           
+    
+
+    <script src="../js/main.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#sendEmailButton").click(function (event) {
+          event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
+
+          // AJAX 요청
+          $.ajax({
+            url: "/sendemail", // 이메일 전송을 처리하는 URL
+            type: "POST", // 전송 방식 (POST)
+            success: function (response) {
+              alert("이메일이 성공적으로 전송되었습니다!");
+              // 성공 시 수행할 작업 추가
+            },
+            error: function (xhr, status, error) {
+              alert("이메일 전송에 실패했습니다!");
+              // 실패 시 수행할 작업 추가
+            },
+          });
+        });
+      });
+
+
+
+
+      
+    </script>
+
+    
+  </body>
+</html>
