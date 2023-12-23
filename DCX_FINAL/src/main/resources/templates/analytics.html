@@ -13,7 +13,7 @@
     <!-- STYLESHEET -->
 
 
-    <link rel="stylesheet" href="../css/style.css" />
+    <!--<link rel="stylesheet" href="../css/style.css" />-->
     <link rel="stylesheet" href="../css/storage.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,0,0" />
 
@@ -100,29 +100,30 @@
         <!-- ------------ END OF ASIDE ------------ -->
         <main>
 
-            <div class="header-wrapper">
-                <div class="header-title">
-                  <h1>No Smoking Map</h1>
-                </div>
-                <div class="user-info">
-                  <button id="menu-btn">
+          <div class="header-wrapper">
+            <div class="header-title">
+                <h1>No Smoking Map</h1>
+            </div>
+            
+            <div class="top">
+                <button id="menu-btn">
                     <span class="material-icons-sharp">menu</span>
-                  </button>
-                  <div class="theme-toggler">
+                </button>
+                <div class="theme-toggler">
                     <span class="material-icons-sharp active">light_mode</span>
                     <span class="material-icons-sharp">dark_mode</span>
-                  </div>
-                  <div class="profile">
+                </div>
+                <div class="profile">
                     <div class="info">
                         <p>Hey, <b th:text="${session.loginMember.id}"></b></p>
                         <small class="text-muted" th:text="${session.loginMember.email}"></small>
                     </div>
                     <div class="profile-photo">
-                      <img src="../images/profile2.jpg" alt="" />
+                        <img src="../images/profile2.jpg" alt="">
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
+        </div>
 
 
            

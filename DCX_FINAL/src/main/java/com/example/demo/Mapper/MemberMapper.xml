@@ -25,4 +25,18 @@
 		SET confirmed = 1
 		WHERE video_path = #{video_path}
 	</update>
+
+
+<!-- 검색-->
+<select id="searching" parameterType="String" resultType="com.example.demo.Entity.Storage">
+  <![CDATA[
+    SELECT *
+    FROM Storage
+    WHERE ID = (SELECT ID FROM User WHERE ID=#{memberId})
+      AND record_start >= CAST(#{item_name} AS DATE)
+      AND record_start < CAST(#{item_name} AS DATE) + INTERVAL 1 DAY
+    ORDER BY RECORD_START DESC
+  ]]>
+</select>
+<!-- 검색-->
 </mapper>

@@ -30,7 +30,7 @@
     <script>
       // local host가 아니라 나의 컴퓨터의 ip주소를 입력해줘야 한다 
       // chat2.html에서 바꿔주었더니 작동이 된다 
-      const webSocket = new WebSocket("ws://172.30.1.88:3001");
+      const webSocket = new WebSocket("ws://172.30.1.18:3001");
 
       webSocket.onopen = function () {
         const chatArea = document.getElementById("chatBody");

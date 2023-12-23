@@ -1,7 +1,9 @@
 package com.example.demo.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +26,6 @@ import com.example.demo.java.NaverAuthenticationService;
 import com.example.demo.java.NaverEmailService;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.Random;
 
 // 동엽 1차
 
@@ -75,7 +76,7 @@ public class HomeController {
             System.out.println(memberId);
             System.out.println(loginMember.getEmail().substring(loginMember.getEmail().length() - 9));
 
-            String DATA_DIRECTORY = "C:/Users/smhrd/Desktop/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos/";
+            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";
                                    
             File dir = new File(DATA_DIRECTORY);
 
@@ -92,8 +93,9 @@ public class HomeController {
 
             for (int i = 0; i < filenames.length; i++) {
                 filename2[i] = DATA_DIRECTORY + filenames[i];
-                int sucornot = mapper.savevid(memberId, filename2[i].substring(101, 117), filename2[i].substring(89));
-                System.out.println(filename2[i].substring(101, 117));
+                int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
+                System.out.println(filename2[i].substring(107, 123));
+                System.out.println(filename2[i].substring(95));
                 System.out.println(sucornot);
                 // System.out.println(filename2[i]);
                 if (sucornot > 0) {
@@ -233,7 +235,7 @@ public class HomeController {
 
             Member loginMember = (Member) session.getAttribute("loginMember");
             String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
-            String DATA_DIRECTORY = "C:/Users/smhrd/Desktop/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos/";
+            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";
                                    
             File dir = new File(DATA_DIRECTORY);
 
@@ -250,8 +252,9 @@ public class HomeController {
 
             for (int i = 0; i < filenames.length; i++) {
                 filename2[i] = DATA_DIRECTORY + filenames[i];
-                int sucornot = mapper.savevid(memberId, filename2[i].substring(101, 117), filename2[i].substring(89));
-                System.out.println(filename2[i].substring(101, 117));
+                int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
+                System.out.println(filename2[i].substring(107, 123));
+                System.out.println(filename2[i].substring(95));
                 System.out.println(sucornot);
                 // System.out.println(filename2[i]);
                 if (sucornot > 0) {
@@ -327,4 +330,22 @@ public class HomeController {
 
         return "redirect:../videos/{videoFileName}";
     }
+
+
+
+	@RequestMapping("/search") 
+	public String m1(@RequestParam(value = "item_name", required = false) String no, Member member, HttpSession session) throws IOException {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+            String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
+		System.out.println(no);
+		List<Storage> list = mapper.searching(memberId, no);
+		System.out.println(list);
+
+		
+
+		session.setAttribute("search_value", list);
+		return "search";
+	}
+
 }

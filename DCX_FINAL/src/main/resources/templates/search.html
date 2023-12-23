@@ -101,7 +101,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="storage : ${session.result_storage}">
+                        <tr th:each="storage : ${session.search_value}">
                             <td th:text="${storage.idx}">storage.idx</td>
                             <td>85631</td>
                             <td><a href="#">노량진역</a></td>
@@ -121,12 +121,12 @@
         </main>
         
             
-     </div>
-     <script src="https://kit.fontawesome.com/f3aa567758.js" crossorigin="anonymous"></script>
+    </div>
+    <script src="https://kit.fontawesome.com/f3aa567758.js" crossorigin="anonymous"></script>
 
 
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-     <script src="../js/index.js"></script>
-     
+       <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../js/index.js"></script>
+    
 </body>
 </html>

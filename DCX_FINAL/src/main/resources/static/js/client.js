@@ -20,7 +20,7 @@ const WebSocket = require("ws");
 // 원래 작동
 // const ws = new WebSocket("ws://localhost:3001");
 // 서버 채팅
-const ws = new WebSocket("ws://172.30.1.88:3001");
+const ws = new WebSocket("ws://172.30.1.18:3001");
 
 ws.on("open", () => {
   console.log("WebSocket connection opened");

@@ -24,4 +24,6 @@ public interface MemberMapper {
 
 	public int updateConfirmed(String video_path);
 
+	public List<Storage> searching(String memberId, String item_name);
+
 }
