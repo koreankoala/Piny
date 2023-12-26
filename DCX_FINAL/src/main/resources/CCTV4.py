@@ -211,7 +211,7 @@ def gen():
 def index():
     return render_template('videotest4')
 
-@app.route('/python4')
+@app.route('/python5')
 def video_feed4():
     return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
