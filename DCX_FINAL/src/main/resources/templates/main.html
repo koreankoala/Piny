@@ -20,7 +20,7 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <a href = "/"><img src="../images/logo.png"></a>
+                    <a href = "/main"><img src="../images/logo.png"></a>
                     <h2>PINY<span class="danger"> Catch U</span></h2>
                 </div>
                 <div class="close" id="close-btn">
@@ -44,14 +44,12 @@
                 <a class="menu-item" href="/storage">
                     <span class="material-icons-sharp">view_list</span>
                     <h3>Video List</h3>
-                    <span class="message-count active">26</span>
+                    <span class="message-count active" th:text="${session.countCheck}"></span>
                 </a>
-                <a class="menu-item" href = "/analytics">
-                    <span class="material-symbols-sharp">public</span>
-                        
-                    <h3>No Smoking Map</h3>
+                <a class="menu-item" href = "/map">
+                    <span class="material-symbols-sharp">public</span>     
+                    <h3>Smoking Place</h3>
                 </a>
-                
                 <a href="/logout">
                     <span class="material-icons-sharp">logout</span>
                     <h3>Logout</h3>
@@ -61,10 +59,6 @@
         <!-- ------------ END OF ASIDE ------------ -->
         <main>
             <h1>Dashboard</h1>
-
-            <div class="date">
-                <input type="date">
-            </div>
 
             <div class="insights">
                 <div class="sales">
@@ -83,7 +77,6 @@
                             </div>
                         </div>
                     </div>
-                    <small class="text-muted">Last 24 Hours</small>
                 </div>
                 <!-- ------------ END OF SALES ------------ -->
                 <div class="expenses">
@@ -91,37 +84,19 @@
                     <div class="middle">
                         <div class="left">
                             <h3>확인 필요한 감지알림</h3>
-                            <h1>3 개</h1>
-                        </div>
-                        <div class="progress">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>62%</p>
-                            </div>
+                            <h1 id="countCheck" th:text="${session.countCheck}+' 건'"></h1>
                         </div>
                     </div>
-                    <small class="text-muted">Last 24 Hours</small>
                 </div>
                 <!-- ------------ END OF EXPENSES ------------ -->
                 <div class="income">
                     <span class="material-icons-sharp">bar_chart</span>
                     <div class="middle">
                         <div class="left">
-                            <h3>TODAY 총 적발건수</h3>
-                            <h1>89 건</h1>
-                        </div>
-                        <div class="progress">
-                            <svg>
-                                <circle cx="38" cy="38" r="36"></circle>
-                            </svg>
-                            <div class="number">
-                                <p>44%</p>
-                            </div>
+                            <h3 id="countSmokeDay">TODAY 총 적발건수</h3>
+                            <h1 id="countSmoke" th:text="${session.countSmoke}+' 건'"></h1>
                         </div>
                     </div>
-                    <small class="text-muted">Last 24 Hours</small>
                 </div>
                 <!-- ------------ END OF INCOME ------------ -->
             </div>
@@ -133,21 +108,22 @@
                         <tr>
                             <th>기록 번호</th>
                             <th>감지 일시</th>
-                            <!-- <th>확인 여부</th> -->
+                            <th>확인 여부</th>
+                            <th>비디오 재생</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
                        <tr th:each="s : ${session.result_storage2}">
                             <td th:text="${s.idx}">Index</td>
                             <td th:text="${s.record_start}">Record Start</td>
-                            <!-- <td class="primary"><span class="material-icons-sharp">check_circle_outline</span></td> -->
+                            <td th:if="${s.confirmed == 0}" class="primary"><i class="fa-sharp fa-solid fa-circle-xmark"></i><span th:text ="${s.confirmed}" style="display: none;">storage.confirmed</span></td>
+                            <td th:if="${s.confirmed == 1}"><i class="fa-solid fa-circle-check" style="color: #00ff7b;"></i></td>
+                            <td th:text = "${s.video_path}" style="display: none;">storage.video_path</td>
+                            <td><a th:href="'storage/' + ${s.video_path}">Play Video</a></td>
                         </tr>
-                        
                     </tbody>
                 </table>
                 <a href="/storage">Show All</a>
-            
-            <button id="sendEmailButton">이메일 전송</button>
                 
             </div>
         </main>
@@ -226,101 +202,101 @@
 
         </div>
 
-    <script src="../js/main.js"></script>
-    
-    <script>
-      $(document).ready(function () {
-        $("#sendEmailButton").click(function (event) {
-          event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
-
-          // AJAX 요청
-          $.ajax({
-            url: "/sendemail", // 이메일 전송을 처리하는 URL
-            type: "POST", // 전송 방식 (POST)
-            success: function (response) {
-              alert("이메일이 성공적으로 전송되었습니다!");
-              // 성공 시 수행할 작업 추가
-            },
-            error: function (xhr, status, error) {
-              alert("이메일 전송에 실패했습니다!");
-              // 실패 시 수행할 작업 추가
-            },
-          });
-        });
-      });
-    </script>
-    <script>
-        // local host가 아니라 나의 컴퓨터의 ip주소를 입력해줘야 한다 
-        // chat2.html에서 바꿔주었더니 작동이 된다 
-        const webSocket = new WebSocket("ws://172.30.1.18:3001");
-  
-        webSocket.onopen = function () {
-          const chatArea = document.getElementById("chatBody");
-          chatArea.innerHTML = "WebSocket connection established.";
-        };
-  
-        webSocket.onmessage = function (event) {
-          appendOtherMessage(event.data);
-          updateChatScroll();
-        };
-  
-        webSocket.onclose = function () {
-          const chatArea = document.getElementById("chatBody");
-          chatArea.innerHTML = "WebSocket connection closed.";
-        };
-  
-        webSocket.onerror = function (error) {
-          console.error(error);
-        };
-  
-        function sendMessage() {
-          var messageInput = document.getElementById("messageInput");
-          var message = messageInput.value.trim();
-          if (message !== "") {
-            appendUserMessage(message);
-            webSocket.send(message);
-            messageInput.value = "";
-            updateChatScroll();
-          }
-        }
-  
-        function appendUserMessage(message) {
-          appendMessage("user-message", message);
-        }
-  
-        function appendOtherMessage(message) {
-          appendMessage("other-message", message);
-        }
-  
-        function appendMessage(className, message) {
-          const chatBody = document.getElementById("chatBody");
-          const messageDiv = document.createElement("div");
-          messageDiv.className = "message " + className;
-  
-          // Display the username
-          var usernameElement = document.createElement("div");
-          usernameElement.classList.add("username");
-          usernameElement.textContent = "Username"; // Replace with the actual username variable you have
-  
-          var messageElement = document.createElement("div");
-          messageElement.classList.add(className);
-          messageElement.textContent = message;
-  
-          messageDiv.appendChild(usernameElement);
-          messageDiv.appendChild(messageElement);
-  
-          chatBody.appendChild(messageDiv);
-        }
-  
-        function updateChatScroll() {
-          const chatArea = document.getElementById("chatBody");
-          chatArea.scrollTop = chatArea.scrollHeight;
-        }
-      </script>
-  
-      <!-- ../app.js -->
-      <!-- 서버에 연결 -->
-      <script src="../js/client.js"></script>
-     
-  </body>
-</html>
+        
+        <!-- <script>
+            $(document).ready(function () {
+                $("#sendEmailButton").click(function (event) {
+                    event.preventDefault(); // 버튼의 기본 동작 중지 (페이지 이동 방지)
+                    
+                    // AJAX 요청
+                    $.ajax({
+                        url: "/sendemail", // 이메일 전송을 처리하는 URL
+                        type: "POST", // 전송 방식 (POST)
+                        success: function (response) {
+                            alert("이메일이 성공적으로 전송되었습니다!");
+                            // 성공 시 수행할 작업 추가
+                        },
+                        error: function (xhr, status, error) {
+                            alert("이메일 전송에 실패했습니다!");
+                            // 실패 시 수행할 작업 추가
+                        },
+                    });
+                });
+            });
+        </script> -->
+        <script>
+            // local host가 아니라 나의 컴퓨터의 ip주소를 입력해줘야 한다 
+            // chat2.html에서 바꿔주었더니 작동이 된다 
+            const webSocket = new WebSocket("ws://172.30.1.18:3001");
+            
+            webSocket.onopen = function () {
+                const chatArea = document.getElementById("chatBody");
+                chatArea.innerHTML = "WebSocket connection established.";
+            };
+            
+            webSocket.onmessage = function (event) {
+                appendOtherMessage(event.data);
+                updateChatScroll();
+            };
+            
+            webSocket.onclose = function () {
+                const chatArea = document.getElementById("chatBody");
+                chatArea.innerHTML = "WebSocket connection closed.";
+            };
+            
+            webSocket.onerror = function (error) {
+                console.error(error);
+            };
+            
+            function sendMessage() {
+                var messageInput = document.getElementById("messageInput");
+                var message = messageInput.value.trim();
+                if (message !== "") {
+                    appendUserMessage(message);
+                    webSocket.send(message);
+                    messageInput.value = "";
+                    updateChatScroll();
+                }
+            }
+            
+            function appendUserMessage(message) {
+                appendMessage("user-message", message);
+            }
+            
+            function appendOtherMessage(message) {
+                appendMessage("other-message", message);
+            }
+            
+            function appendMessage(className, message) {
+                const chatBody = document.getElementById("chatBody");
+                const messageDiv = document.createElement("div");
+                messageDiv.className = "message " + className;
+                
+                // Display the username
+                var usernameElement = document.createElement("div");
+                usernameElement.classList.add("username");
+                usernameElement.textContent = "Username"; // Replace with the actual username variable you have
+                
+                var messageElement = document.createElement("div");
+                messageElement.classList.add(className);
+                messageElement.textContent = message;
+                
+                messageDiv.appendChild(usernameElement);
+                messageDiv.appendChild(messageElement);
+                
+                chatBody.appendChild(messageDiv);
+            }
+            
+            function updateChatScroll() {
+                const chatArea = document.getElementById("chatBody");
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        </script>
+        
+        <!-- ../app.js -->
+        <!-- 서버에 연결 -->
+        <script src="../js/client.js"></script>
+        <script src="../js/main.js"></script>
+        
+    </body>
+    </html>

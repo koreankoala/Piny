@@ -1,7 +1,6 @@
 const sideMenu = document.querySelector("aside");
 const menuBtn = document.querySelector("#menu-btn");
 const closeBtn = document.querySelector("#close-btn");
-const themeToggler = document.querySelector(".theme-toggler");
 const menuItems = document.querySelectorAll('.menu-item');
 
 // SIDEBAR
@@ -52,8 +51,8 @@ themetoggler.addEventListener('click', () => {
     document.body.classList.toggle('dark-theme-variables');
 
     // Toggle the 'active' class on the theme toggler icons
-    themetoggler.querySelector('span:nth-child(1)').classList.toggle('active', !isDarkMode);
-    themetoggler.querySelector('span:nth-child(2)').classList.toggle('active', isDarkMode);
+    themetoggler.querySelector('span:nth-child(1)').classList.toggle('active', isDarkMode);
+    themetoggler.querySelector('span:nth-child(2)').classList.toggle('active', !isDarkMode);
 
     // Update isDarkMode based on the current body class
     isDarkMode = document.body.classList.contains('dark-theme-variables');
@@ -63,8 +62,110 @@ themetoggler.addEventListener('click', () => {
     localStorage.setItem('theme', newTheme);
 });
 
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        document.getElementById("btnPrevCalendar").addEventListener("click", function(event) {
+            prevCalendar();
+        });
+        
+        document.getElementById("nextNextCalendar").addEventListener("click", function(event) {
+            nextCalendar();
+        });
+    });
+
+  function updateTableWithData(storageList) {
+    const tbody = document.getElementById('tbody');
+
+    // 기존 테이블 내용 초기화
+    tbody.innerHTML = '';
+
+    // 받은 storageList를 반복하여 테이블에 추가
+    storageList.forEach(function(storage) {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${storage.idx}</td>
+          <td>${storage.record_start}</td>
+          <td>
+              ${storage.confirmed == 0 ? 
+                  `<i class="fa-sharp fa-solid fa-circle-xmark" style="color: #"></i>` : 
+                  `<i class="fa-solid fa-circle-check" style="color: #00ff7b;"></i>`
+              }
+              <span style="display: none;">${storage.confirmed}</span>
+          </td>
+          <td style="display: none;">${storage.video_path}</td>
+          <td><a href="storage/${storage.video_path}">Play Video</a></td>
+        `;
+
+
+        // 테이블에 새로운 행 추가
+        tbody.appendChild(row);
+    });
+}  
 
 // Calendar
+let calendarDays = document.querySelector('.calendar-days');
+
+calendarDays.addEventListener('click', function(event) {
+
+    // 클릭한 요소의 값을 콘솔에 출력
+    var year = document.getElementById('year').innerText;
+    var month = document.getElementById('month-picker').innerText;
+
+    if(month == 'January'){var m = '01';}
+    if(month == 'February'){var m = '02';}
+    if(month == 'March'){var m = '03';}
+    if(month == 'April'){var m = '04';}
+    if(month == 'May'){var m = '05';}
+    if(month == 'June'){var m = '06';}
+    if(month == 'July'){var m = '07';}
+    if(month == 'August'){var m = '08';}
+    if(month == 'September'){var m = '09';}
+    if(month == 'October'){var m = '10';}
+    if(month == 'November'){var m = '11';}
+    if(month == 'December'){var m = '12';}
+
+    // 일의 자리 정수를 두 자리로 표시하는 함수
+    function formatNumber(number) {
+        return number < 10 ? `0${number}` : `${number}`;
+    }
+    
+    var date = year+'-'+m+'-'+formatNumber(parseInt(event.target.textContent));
+
+    console.log(date);
+    
+    // AJAX 요청
+    $.ajax({
+        url: '/calendarchange',
+        type: 'POST',
+        data: { checkdate: date },
+        success: function(response) {
+          
+          let storageList = response.storageList;
+          let smokeCount = response.smokeCount;
+          let calendarCount = response.calendarCount;
+
+          const countSmoke = smokeCount +' 건';
+          const countCheckCalendar = calendarCount +' 건';
+  
+          const countSmokeElement = document.getElementById('countSmoke');
+          const countSmokeDayElement = document.getElementById('countSmokeDay');
+          const countCheckCalendarElement = document.getElementById('countCheck');
+  
+          countSmokeDayElement.textContent = date+' 총 적발 건수';
+          countSmokeElement.textContent = countSmoke;
+          countCheckCalendarElement.textContent = countCheckCalendar;
+
+          updateTableWithData(storageList);
+        },
+        error: function(xhr, status, error) {
+            // alert('달력 로드 불가');
+        }
+    });
+    
+
+    });
+
 const isLeapYear = (year) => {
     return (
       (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) ||
@@ -123,7 +224,7 @@ const isLeapYear = (year) => {
       31,
       30,
       31,
-    ];
+    ];  
     
     let currentDate = new Date();
     
@@ -220,44 +321,3 @@ const isLeapYear = (year) => {
     )}: ${`${timer.getSeconds()}`.padStart(2, '0')}`;
     todayShowTime.textContent = formateTimer;
   }, 1000);
-
-  
-// cctv 실시간 on off
-const toggleBtns = document.querySelectorAll(".toggle-btn");
-
-toggleBtns.forEach((toggleBtn) => {
-    toggleBtn.addEventListener("click", () => {
-        toggleBtn.classList.toggle("active");
-
-        const lockIcon = toggleBtn.querySelector(".icon span");
-
-        if (toggleBtn.classList.contains("active")) {
-            lockIcon.textContent = "play_arrow";
-        } else {
-            lockIcon.textContent = "stop";
-        }
-    });
-});
-
-function toggleModel(modelNumber) {
-    var toggleIcon = document.getElementById("toggle-icon-" + modelNumber);
-    if (toggleIcon.textContent === "stop") {
-      startModel(modelNumber);
-      toggleIcon.textContent = "play_arrow";
-    } else {
-      stopModel(modelNumber);
-      toggleIcon.textContent = "stop";
-    }
-  }
-  
-  function startModel(modelNumber) {
-    // 해당 모델에 대한 WebSocket 및 모델 실행 코드 작성
-    // 예: ws1.send("startModel1");
-    // 예: ws1.send("stopModel1");
-  }
-  
-  function stopModel(modelNumber) {
-    // 해당 모델에 대한 WebSocket 및 모델 중지 코드 작성
-    // 예: ws1.send("stopModel1");
-  }
-  

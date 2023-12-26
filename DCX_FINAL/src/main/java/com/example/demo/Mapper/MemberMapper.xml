@@ -10,7 +10,22 @@
 	<select id="idCheck" parameterType="String" resultType="Integer">select count(*) from User where ID = #{id}</select>
 
 	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY confirmed ASC, RECORD_START DESC</select>
+
 	<select id="videoListtwo" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY RECORD_START DESC LIMIT 5</select>
+
+	<select id="videoListthree" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} ORDER BY RECORD_START DESC LIMIT 5</select>
+
+	<select id="searching" parameterType="String" resultType="com.example.demo.Entity.Storage">
+		<![CDATA[
+			SELECT *
+			FROM Storage
+			WHERE ID = (SELECT ID FROM User WHERE ID=#{memberId})
+			AND record_start >= CAST(#{item_name} AS DATE)
+			AND record_start < CAST(#{item_name} AS DATE) + INTERVAL 1 DAY
+			ORDER BY RECORD_START DESC
+		]]>
+	</select>
+
 	<insert id="savevid" parameterType="String">INSERT INTO Storage(id, record_start, video_path)
 		SELECT #{id}, #{record_start}, #{video_path}
 		FROM dual
@@ -26,17 +41,14 @@
 		WHERE video_path = #{video_path}
 	</update>
 
+	<update id="update" parameterType="com.example.demo.Entity.Member">update User set PW=#{pw}, Email=#{email} where ID=#{id}</update>
 
-<!-- 검색-->
-<select id="searching" parameterType="String" resultType="com.example.demo.Entity.Storage">
-  <![CDATA[
-    SELECT *
-    FROM Storage
-    WHERE ID = (SELECT ID FROM User WHERE ID=#{memberId})
-      AND record_start >= CAST(#{item_name} AS DATE)
-      AND record_start < CAST(#{item_name} AS DATE) + INTERVAL 1 DAY
-    ORDER BY RECORD_START DESC
-  ]]>
-</select>
-<!-- 검색-->
+	<delete id="withdraw" parameterType="String">delete from User where ID=#{id}</delete>
+
+	<select id="countSmoke" parameterType="String">select count(*) from Storage where RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} AND ID=#{id}</select>
+
+	<select id="countCheck" parameterType="String">select count(*) from Storage where ID=#{id} and confirmed=0</select>
+
+	<select id="countCheckCalendar" parameterType="String">select count(*) from Storage where ID=#{id} and confirmed=0 and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2}</select>
+
 </mapper>

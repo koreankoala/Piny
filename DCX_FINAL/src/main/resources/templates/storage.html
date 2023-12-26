@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PINY</title>
     <!-- MATERIAL CON -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,0,0" />
     <!-- STYLESHEET -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="../css/storage.css">
 </head>
 <body>
@@ -16,16 +16,16 @@
         <aside>
             <div class="top">
                 <div class="logo">
-                    <a href="/service"><img src="../images/logo.png">
-                    <h2>PINY<span class="danger"> Catch U</span></h2></a>
+                    <a href="/main"><img src="../images/logo.png"/></a>
+                    <h2>PINY<span class="danger"> Catch U</span></h2>
                 </div>
                 <div class="close" id="close-btn">
                     <span class="material-icons-sharp">close</span>
                 </div>
             </div>
-            
+
             <div class="sidebar">
-                <a class="menu-item active" href="/main">
+                <a class="menu-item" href="/main">
                     <span class="material-icons-sharp">grid_view</span>
                     <h3>Dashboard</h3>
                 </a>
@@ -33,22 +33,18 @@
                     <span class="material-icons-sharp">person_outline</span>
                     <h3>My page</h3>
                 </a>
-                <a class="menu-item"  href="/video">
+                <a class="menu-item" href="/video">
                     <span class="material-icons-sharp">videocam</span>
                     <h3>Video Streaming</h3>
                 </a>
-                <a class="menu-item"  href="/storage">
+                <a class="menu-item active" href="/storage">
                     <span class="material-icons-sharp">view_list</span>
                     <h3>Video List</h3>
-                    <span class="message-count active">26</span>
+                    <span class="message-count active" th:text="${session.countCheck}"></span>
                 </a>
-                <a class="menu-item">
-                    <span class="material-icons-sharp">insights</span>
-                    <h3>Analytics</h3>
-                </a>
-                <a class="menu-item" href="/chat">
-                  <span class="material-icons-sharp">chat</span>
-                  <h3>chat</h3>
+                <a class="menu-item" href = "/map">
+                    <span class="material-symbols-sharp">public</span>     
+                    <h3>Smoking Place</h3>
                 </a>
                 <a href="/logout">
                     <span class="material-icons-sharp">logout</span>
@@ -62,13 +58,17 @@
                 <div class="header-title">
                     <h1>Video List</h1>
                 </div>
-                <form action = "search" method = "get">
+                <!-- <form action = "search" method="get">
+                    <div class="search-box">
+                        <button type="submit"><span class="material-icons-sharp">search</span></button>
+                        <input type="text" placeholder="YYYY-MM-dd" name="item_name" autocomplete="off">
+                    </div>
+                </form> -->
                 <div class="search-box">
-                    <span class="material-icons-sharp">search</span>
-                    <input type="text" placeholder="Year-Month-day" name="item_name">
+                    <button type="button" id="search"><span class="material-icons-sharp">search</span></button>
+                    <input type="text" placeholder="YYYY-MM-DD" name="item_name" id="searchdate" autocomplete="off">
                 </div>
-            </form>
-                <div class="top">
+                <div class="user-info">
                     <button id="menu-btn">
                         <span class="material-icons-sharp">menu</span>
                     </button>
@@ -94,39 +94,27 @@
                     <thead>
                         <tr>
                             <th>기록 번호</th>
-                            <th>CCTV 번호</th>
-                            <th>금연구역명</th>
                             <th>감지 일시</th>
                             <th>확인 여부</th>
+                            <th>비디오 재생</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
                         <tr th:each="storage : ${session.result_storage}">
                             <td th:text="${storage.idx}">storage.idx</td>
-                            <td>85631</td>
-                            <td><a href="#">노량진역</a></td>
                             <td th:text="${storage.record_start}">storage.record_start</td>
                             <td th:if="${storage.confirmed == 0}" class="primary"><i class="fa-sharp fa-solid fa-circle-xmark"></i><span th:text ="${storage.confirmed}" style="display: none;">storage.confirmed</span></td>
                             <td th:if="${storage.confirmed == 1}"><i class="fa-solid fa-circle-check" style="color: #00ff7b;"></i></td>
                             <td th:text = "${storage.video_path}" style="display: none;">storage.video_path</td>
-                            <td>
-                               <a th:href="'storage/' + ${storage.video_path}">Play Video</a>
-                                
-                            </td>
+                            <td><a th:href="'storage/' + ${storage.video_path}">Play Video</a></td>
                         </tr>
                     </tbody>
                 </table>
-                <a href="#">Show All</a>
             </div>
         </main>
-        
-            
-     </div>
-     <script src="https://kit.fontawesome.com/f3aa567758.js" crossorigin="anonymous"></script>
-
-
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-     <script src="../js/index.js"></script>
-     
+    </div>
+    <script src="https://kit.fontawesome.com/f3aa567758.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../js/storage.js"></script>
 </body>
 </html>

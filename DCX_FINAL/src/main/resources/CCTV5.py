@@ -12,11 +12,12 @@ CORS(app)  # Enable CORS for all routes
 model = YOLO("C:/Users/korea/OneDrive/바탕 화면/final_project_data/second_try.pt")
 
 # Set detailed values for video recording
+# fps = 10, record_duration = 25 딱 10초
 fps = 10
 w, h = 640, 480
 record = False
 record_start_time = 0
-record_duration = 20  # seconds
+record_duration = 25  # seconds
 cnt_rec = 1
 
 def start_recording():
@@ -86,7 +87,7 @@ def gen():
 
 @app.route('/')
 def index():
-    return render_template('videotest4.html')
+    return render_template('main')
 
 @app.route('/python5')
 def video_feed4():
