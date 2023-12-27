@@ -67,7 +67,7 @@ body {
     width: 96%;
     margin: 0 auto;
     gap: 1.8rem;
-    grid-template-columns: 14rem auto 0;
+    grid-template-columns: 14rem auto;
 }
 
 a {
@@ -135,6 +135,10 @@ p {
     color: var(--color-warning);
 }
 
+.gray {
+    color: var(--color-info-dark)
+}
+
 aside {
     height: 100vh;
 }
@@ -148,9 +152,16 @@ aside .top {
 
 aside .logo a {
     display: flex;
-    align-items: center;
-    justify-content: center;
     gap: 0.8rem;
+}
+
+aside .logo img {
+    width: 2rem;
+    height: 2rem;
+}
+
+aside .close {
+    display: none;
 }
 
 /* logo 종 움직임 */
@@ -221,15 +232,6 @@ aside .logo a {
     }
   
   }
-
-aside .logo img {
-    width: 2rem;
-    height: 2rem;
-}
-
-aside .close {
-    display: none;
-}
 
 /* ===================== SIDEBAR ===================== */
 aside .sidebar {
@@ -303,7 +305,6 @@ main {
     /* #ebe9e9 */
     width: 100%;
     padding: 1rem;
-    margin-top: 1.4rem;
 }
 
 .header-wrapper {
@@ -338,27 +339,32 @@ main {
     padding: 10px;
 }
 
-.search-box span {
+.search-box button {
+    background: none;
+}
+
+.search-box button span {
     font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.5s ease-out;
+    color: var(--color-primary);
 }
 
 .search-box span:hover {
     transform: scale(1.2);
 }
 
-.user-info {
+.top {
     display: flex;
     align-items: end;
-    gap: 1rem;
+    gap: 2rem;
 }
 
-.user-info button {
+.top button {
     display: none;
 }
 
-.user-info .theme-toggler {
+.top .theme-toggler {
     background: var(--color-light);
     display: flex;
     justify-content: space-between;
@@ -369,7 +375,7 @@ main {
     border-radius: var(--border-radius-1);
 }
 
-.user-info .theme-toggler span {
+.top .theme-toggler span {
     font-size: 1.2rem;
     width: 50%;
     height: 100%;
@@ -378,23 +384,19 @@ main {
     justify-content: center;
 }
 
-.user-info .theme-toggler span.active{
+.top .theme-toggler span.active{
     background: var(--color-primary);
     color: white;
     border-radius: var(--border-radius-1);
 }
 
-.user-info .profile {
+.top .profile {
     display: flex;
     gap: 1rem;
     text-align: right;
 }
 
-.info {
-    font-size: 12px;
-}
-
-/* 비디오 스트리밍 영역 스타일 */
+/* =================== CCTV 스트리밍 영역 스타일 =================== */
 section {
     display: grid;
     grid-template-columns: 1.8fr 0.6fr;
@@ -427,17 +429,17 @@ section {
     margin: 1rem;
 }
 
-/* 카메라 play,stop 스타일 */
-.camara-container {
+/* ============ 카메라 play,stop ============ */
+.camera-container {
     margin-top: 1rem;
 }
 
-.camara-container h2 {
+.camera-container h2 {
     margin-bottom: 0.8rem;
     margin-left: 1.2rem;
 }
 
-.camara-container .cameras {
+.camera-container .cameras {
     background: var(--color-white);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
@@ -446,7 +448,7 @@ section {
     height: 88%;
 }
 
-.camara-container .cameras .camera {
+.camera-container .cameras .camera {
     display: flex;
     margin-top: 1.2rem;
     justify-content: center;
@@ -466,19 +468,20 @@ section {
     box-sizing: border-box;
 }
 
+/* 카메라 play,stop 버튼 */
 .toggle-btn {
     position: relative;
     height: 50%;
     width: 100%;
     background: #ddd;
     border-radius: 100px;
-    margin-top: rem;
+    margin-top: 1rem;
     cursor: pointer;
     transition: all 0.4s ease;
 }
 
 .toggle-btn.active {
-    background: #7c2ae8d2;
+    background: #9796f0;
 }
 
 .toggle-btn .icon {
@@ -499,7 +502,8 @@ section {
 
 .toggle-btn.active .icon{
     left: calc(40% + 15px);
-    color: #7c2ae8d2;
+    color: #9796f0;
+    /* #7c2ae8d2; */
 }
 
 .toggle-btn .icon span{
@@ -510,36 +514,35 @@ section {
 
 /* ===================== 최근 영상 증거물 기록 ===================== */
 main .recent-video {
-    margin-top: 2rem;
+    margin-top: 1.25rem;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
 }
 
 main .recent-video h2 {
-    margin-bottom: 1rem;
-    margin-left: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 main .recent-video table {
     background: var(--color-white);
     width: 100%;
-    height: 80%;
+    margin: auto;
     border-radius: var(--card-border-radius);
     padding: var(--card-padding);
     text-align: center;
     box-shadow: var(--box-shadow);
     transition: all 300ms ease;
-    font-size: 14px;
 }
 
 main .recent-video table:hover {
     box-shadow: none;
 }
 
-main table thead th {
-    height: 2rem;
-}
-
 main table tbody td {
-    height: 0.8rem;
+    height: 2.8rem;
     border-bottom: 1px solid var(--color-light);
     color: var(--color-dark-varient);
 }
@@ -551,15 +554,54 @@ main table tbody tr:last-child td {
 main .recent-video a {
     text-align: center;
     display: block;
-    margin: 0.8rem auto;
+    margin: 1rem auto;
     color: var(--color-primary);
 }
 
-/* ===================== MEDIA QUERIES ===================== 
+/* 금연구역 지도 */
+.legend {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start (top) */
+    /* margin: 20px; */
+    position: relative;
+    left: 940px;
+    bottom: 600px;
+    padding: 40px;
+    border-radius: 5px;   
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.legend-item div {
+    width: 30px;
+    height: 20px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    background: var(--color-white);
+}
+
+.legend-item span {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+#map {
+    width: 900px;
+    height: 600px;
+}
+
+
+/* ===================== MEDIA QUERIES ===================== */
 @media screen and (max-width: 1200px) {
     .container {
        width: 94%;
-       grid-template-columns: 7rem auto 23rem;
+       grid-template-columns: 7rem auto;
     }
 
     aside .logo {
@@ -579,12 +621,19 @@ main .recent-video a {
         margin-top: 1.8rem;
     }
 
-    main .insights {
+    main section {
         grid-template-columns: 1fr;
         gap: 0;
     }
 
-    main .recent-order {
+    /* main table */
+    main table {
+        padding: 1.8rem 2rem 1.8rem 4rem;
+        font-size: 14px;
+        width: 70%;
+    }
+
+    /* main .recent-video {
         width: 94%;
         position: absolute;
         left: 50%;
@@ -592,22 +641,35 @@ main .recent-video a {
         margin: 2rem 0 0 8.8rem;
     }
 
-    main .recent-order table { 
+    main .recent-video table { 
         width: 83vw;
+    } */
+
+    .camera-container .cameras {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    /* 금연구역 지도 */
+    .legend {
+        left: 60%;
+        bottom: 600px;
+        padding: 30px;
     }
 
-    main table thead tr th:last-child,
-    main table thead tr th:first-child {
-        display: none;
+    .legend-item {
+        margin-bottom: 30px;
     }
 
-    main table body td th:last-child,
-    main table body td th:first-child {
-        display: none;
+    #map {
+        width: 60%;
+        height: 600px;
     }
+
 }
-*/
-/* ===================== MEDIA QUERIES ===================== 
+
+/* ===================== MEDIA QUERIES ===================== */
 @media screen and (max-width: 768px) {
     .container {
        width: 100%;
@@ -625,6 +687,12 @@ main .recent-video a {
         padding-right: var(--card-padding);
         display: none;
         animation: showMenu 400ms ease forwards;
+    }
+    
+    .search-box {
+        width: 10%;
+        margin: 0;
+        padding: 0;
     }
 
     @keyframes showMenu {
@@ -660,8 +728,14 @@ main .recent-video a {
         cursor: pointer;
     }
 
+    aside .top {
+        width: 24px;
+        height: 24px;
+        left: -13px;
+    }
+
     main {
-        margin-top: 8rem;
+        margin-top: 5rem;
         padding: 0 1rem;
     }
 
@@ -676,16 +750,20 @@ main .recent-video a {
         margin: 0;
     }
 
-    .right {
-        width: 94%;
-        margin: 0 auto 4rem;
+    main h2 {
+        transform: translateY(30px);
     }
 
-    .right .top {
+    main table {
+        transform: translateY(30px);
+    }
+
+    .top {
         position: fixed;
         top: 0;
         left: 0;
         align-items: center;
+        justify-content: end;
         padding: 0 0.8rem;
         height: 4.6rem;
         background: var(--color-white);
@@ -695,11 +773,11 @@ main .recent-video a {
         box-shadow: 0 1rem 1rem var(--color-light);
     }
 
-    .right .profile .info {
+    .top .profile .info {
         display: none;
     }
 
-    .right .top button {
+    .top button {
         display: inline-block;
         background: transparent;
         cursor: pointer;
@@ -708,9 +786,82 @@ main .recent-video a {
         left: 1rem;
     }
 
-    .right .top button span {
+    .top button span {
         font-size: 2rem;
+    }
+    
+    .header-wrapper {
+        background: transparent;
+    }
+
+    .header-title h1 {
+        display: none;
+    }
+
+    .search-box {
+        transform: translateY(18px);
+        position: absolute;
+        width: 100%;   
+    }
+
+    .search-box input {
+        width: 70%;
+        font-size: 16px;
+        padding: 10px;
+        background: var(--color-white);
+        border-radius: var(--border-radius-2);
+    }
+
+    .search-box input:hover {
+        box-shadow: var(--box-shadow);
+    }
+    
+    /* main table */
+    main table {
+        padding: 1.8rem 2rem 1.8rem 4rem;
+        font-size: 14px;
+        width: 70%;
+    }
+
+    section {
+        margin-top: -10px;
+        margin-left: -10px;
+    }
+    
+    .video-container h2 {
+        margin-top: -40px;
+        margin-bottom: 40px;
+        gap: 0.5rem;
+    }
+    
+    .video-container .videos {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+    }
+
+    .camera-container h2 {
+        margin-top: -2rem;
+        margin-bottom: 3rem;
+        gap: 0.5rem;
+    }
+
+    .camera-container p {
+        font-size: 0.9rem;
+    }
+
+    /* 카메라 play,stop 버튼 */
+    .toggle-btn {
+        margin-left: -10px;
+        height: 45%;
+    }
+
+    .toggle-btn.active {
+        background: #9796f0;
+    }
+
+    .toggle-btn .icon {
+        transform: translateY(-50%) translateX(-50%);
     }
 
 }
-*/

@@ -80,17 +80,19 @@
                         </div>
                     </div>
                 </div>
-                <!-- ------------ END OF SALES ------------ -->
-                <div class="expenses">
-                    <span class="material-icons-sharp">notifications</span>
-                    <div class="middle">
-                        <div class="left">
-                            <h3>확인 필요한 감지알림</h3>
-                            <h1 id="countCheck" th:text="${session.countCheck}+' 건'"></h1>
+                <!-- MAIN TOP 1 -->
+                <a href="/storage">
+                    <div class="expenses">
+                        <span class="material-icons-sharp">notifications</span>
+                        <div class="middle">
+                            <div class="left">
+                                <h3>확인 필요한 감지알림</h3>
+                                <h1 id="countCheck" th:text="${session.countCheck}+' 건'"></h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- ------------ END OF EXPENSES ------------ -->
+                </a>
+                <!-- MAIN TOP 2 -->
                 <div class="income">
                     <span class="material-icons-sharp">bar_chart</span>
                     <div class="middle">
@@ -100,7 +102,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- ------------ END OF INCOME ------------ -->
             </div>
             <!-- ------------ END OF INSIGHTS ------------ -->
             <div class="recent-video">

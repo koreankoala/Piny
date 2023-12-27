@@ -39,20 +39,19 @@ public class HomeController {
     @Autowired
     MemberMapper mapper;
 
-
     @GetMapping("/")
     public String intro() {
 
-    return "loading_start";
-        
-    }
+        return "loading_start";
 
+    }
     @GetMapping(value="/login")
     public String login() {
                                                                     
-        return "login";                            
-    }                                             
-            
+        return "login";   
+                                 
+    }  
+
     @RequestMapping("/main")
     public String login(Member member, HttpSession session) {
         
@@ -63,7 +62,10 @@ public class HomeController {
             Member loginMember = (Member) session.getAttribute("loginMember");
             String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
             String memberEmail = loginMember.getEmail();
-            session.setAttribute("memberEmail", memberEmail);
+
+            if(mapper.loginCheck(memberId) == 0){
+               mapper.loginUser(memberId, memberEmail); // 로그인한 사용자 테이블에 추가(로그인한 사용자를 식별하기 위함)
+            }
 
             LocalDate today = LocalDate.now();
         
@@ -78,6 +80,33 @@ public class HomeController {
 
             int countCheck = mapper.countCheck(memberId);
             session.setAttribute("countCheck", countCheck);
+
+            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";     
+            File dir = new File(DATA_DIRECTORY);
+
+            String[] filenames = dir.list();
+            String[] filename2 = new String[filenames.length];
+
+            // Copying elements from filenames to filename2
+            for (int i = 0; i < filenames.length; i++) {
+                filename2[i] = DATA_DIRECTORY + filenames[i];
+                // System.out.println(filename2[i]);
+            }
+
+            session.setAttribute("video_storage", filename2);
+
+            for (int i = 0; i < filenames.length; i++) {
+                    filename2[i] = DATA_DIRECTORY + filenames[i];
+                    int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
+                    System.out.println(filename2[i].substring(107, 123));
+                    System.out.println(filename2[i].substring(95));  
+                    System.out.println(sucornot);
+                    // System.out.println(filename2[i]);
+                    if (sucornot > 0){
+                        System.out.println("데이터베이스 업데이트 성공!");
+                    }
+
+            }
 
             List<Storage> result_storage = mapper.videoList(memberId);
             List<Storage> result_storage2 = mapper.videoListtwo(memberId);
@@ -95,13 +124,20 @@ public class HomeController {
             System.out.println("로그인 실패");
             return "redirect:/"; // 로그인 페이지로 다시 이동
         } else {
+            
             session.setAttribute("loginMember", result); // 세션에 로그인한 계정의 정보를 저장, 해당 정보는 session.invalidate()나 브라우저를 종료하기
                                                          // 전까지 유효함
             Member loginMember = (Member) session.getAttribute("loginMember");
             String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
+            String memberEmail = loginMember.getEmail();
+
+            if(mapper.loginCheck(memberId) == 0){
+                mapper.loginUser(memberId, memberEmail); // 로그인한 사용자 테이블에 추가(로그인한 사용자를 식별하기 위함)
+            }
+
             System.out.println(memberId);
             System.out.println(loginMember.getEmail().substring(loginMember.getEmail().length() - 9));
-            
+
             LocalDate today = LocalDate.now();
         
             // 날짜를 'yyyy-MM-dd' 형식의 문자열로 변환
@@ -116,7 +152,7 @@ public class HomeController {
             int countCheck = mapper.countCheck(memberId);
             session.setAttribute("countCheck", countCheck);
 
-            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";                  
+            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";     
             File dir = new File(DATA_DIRECTORY);
 
             String[] filenames = dir.list();
@@ -131,27 +167,26 @@ public class HomeController {
             session.setAttribute("video_storage", filename2);
 
             for (int i = 0; i < filenames.length; i++) {
-                filename2[i] = DATA_DIRECTORY + filenames[i];
-                int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
-                System.out.println(filename2[i].substring(107, 123));
-                System.out.println(filename2[i].substring(95));
-                System.out.println(sucornot);
-                // System.out.println(filename2[i]);
-                if (sucornot > 0) {
-                    System.out.println("데이터베이스 업데이트 성공!");
-                }
+                    filename2[i] = DATA_DIRECTORY + filenames[i];
+                    int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
+                    System.out.println(filename2[i].substring(107, 123));
+                    System.out.println(filename2[i].substring(95));  
+                    System.out.println(sucornot);
+                    // System.out.println(filename2[i]);
+                    if (sucornot > 0){
+                        System.out.println("데이터베이스 업데이트 성공!");
+                    }
 
             }
 
             List<Storage> result_storage = mapper.videoList(memberId);
             List<Storage> result_storage2 = mapper.videoListtwo(memberId);
-            if (result_storage == null) { // Uesr에 입력한 회원 정보가 없어 로그인에 실패
+            if(result_storage == null) { // Uesr에 입력한 회원 정보가 없어 로그인에 실패
                 System.out.println("데이터 베이스 불러오기 실패");
             }
-            // System.out.println(result_storage);
+            
             session.setAttribute("result_storage", result_storage);
             session.setAttribute("result_storage2", result_storage2);
-            // return "loading_main";
 
             return "main";
         }
@@ -161,6 +196,13 @@ public class HomeController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
 
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
+
+        if(mapper.loginCheck(memberId) > 0){
+                mapper.logoutUser(memberId);
+            }
+
         session.invalidate(); // 세션에 저장된 정보를 날림(세션에 로그인한 계정 정보를 날림으로 로그아웃)
 
         return "redirect:/";
@@ -168,8 +210,10 @@ public class HomeController {
     }
 
     @PostMapping("/join")
-    public String join(@ModelAttribute Member member) {
+    public String join(@ModelAttribute Member member, @RequestParam("domain_list") String domain_list) {
 
+        member.setEmail(member.getEmail()+domain_list);
+        System.out.println(member.getEmail());
         String pw = member.getPw();
         if (pw.equals("")) {
             System.out.println("비밀번호 미입력");
@@ -221,33 +265,28 @@ public class HomeController {
         return "redirect:/";
 
     }
-
-    // @PostMapping("/sendemail")
-    // public String sendEmail(HttpSession session) {
-
-    //     Member member = (Member) session.getAttribute("loginMember");
-
+    
     @PostMapping("/sendemail")
-        public String sendEmail(@RequestBody Map<String, String> requestData) {
-            String to = requestData.get("email");
-            String formattedFilename = requestData.get("formatted_filename");
+    public String sendEmail(@RequestBody Map<String, String> requestData) {
+        String to = requestData.get("email");
+        String formattedFilename = requestData.get("formatted_filename");
 
-            if (to.substring(to.length() - 9).equals("naver.com")) {
+        if (to.substring(to.length() - 9).equals("naver.com")) {
 
-                NaverEmailService.sendEmail(to, formattedFilename + " 탐지", formattedFilename);
-                
-                return "streaming";
+            NaverEmailService.sendEmail(to, formattedFilename + " 탐지", formattedFilename);
+            
+            return "streaming";
 
-            } else if (to.substring(to.length() - 9).equals("gmail.com")) {
+        } else if (to.substring(to.length() - 9).equals("gmail.com")) {
 
-                GoogleEmailService.sendEmail(to, formattedFilename + " 탐지", formattedFilename);
+            GoogleEmailService.sendEmail(to, formattedFilename + " 탐지", formattedFilename);
 
-                return "streaming";
-            }
-
-            return null;
-
+            return "streaming";
         }
+
+        return null;
+
+    }
 
     @PostMapping("/sendauthentication")
     public String sendAuthentication(HttpSession session, @RequestParam("email") String email) {
@@ -321,15 +360,28 @@ public class HomeController {
     }
 
     @PostMapping("/search") 
-	public ResponseEntity<List<Storage>> m1(@RequestParam("searchdate") String searchdate, HttpSession session) {
+   public ResponseEntity<List<Storage>> m1(@RequestParam("searchdate") String searchdate, HttpSession session) {
 
         Member loginMember = (Member) session.getAttribute("loginMember");
         String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
-		System.out.println(searchdate);
-		List<Storage> list = mapper.searching(memberId, searchdate);
+      System.out.println(searchdate);
+      List<Storage> list = mapper.searching(memberId, searchdate);
 
-		return ResponseEntity.ok(list);
-	}
+      return ResponseEntity.ok(list);
+   }
+    
+    // @RequestMapping("/search") 
+   // public String m1(@RequestParam(value = "item_name", required = false) String no, Member member, HttpSession session) throws IOException {
+
+    //     Member loginMember = (Member) session.getAttribute("loginMember");
+    //         String memberId = loginMember.getId(); // 로그인한 사용자의 Id를 memberId에 할당
+   //    System.out.println(no);
+   //    List<Storage> list = mapper.searching(memberId, no);
+   //    System.out.println(list);
+
+   //    session.setAttribute("search_value", list);
+   //    return "search";
+   // }
 
     @GetMapping(value = "/storage")
     public String storage(HttpSession session, Member member) {
@@ -339,10 +391,7 @@ public class HomeController {
 
             String memberId = member.getId(); // 로그인한 사용자의 Id를 memberId에 할당
 
-            int countCheck = mapper.countCheck(memberId);
-            session.setAttribute("countCheck", countCheck);
-
-             String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";                  
+            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";     
             File dir = new File(DATA_DIRECTORY);
 
             String[] filenames = dir.list();
@@ -360,12 +409,16 @@ public class HomeController {
                 filename2[i] = DATA_DIRECTORY + filenames[i];
                 int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
                 System.out.println(filename2[i].substring(107, 123));
-                System.out.println(filename2[i].substring(95));
+                System.out.println(filename2[i].substring(95));   
+                System.out.println(sucornot);
                 // System.out.println(filename2[i]);
                 if (sucornot > 0) {
                     System.out.println("데이터베이스 업데이트 성공!");
                 }
             }
+
+            int countCheck = mapper.countCheck(memberId);
+            session.setAttribute("countCheck", countCheck);
 
             List<Storage> result_storage = mapper.videoList(memberId);
 
@@ -382,7 +435,6 @@ public class HomeController {
         }
     }
 
-
     @GetMapping(value = "/loading")
     public String loading() {
 
@@ -396,8 +448,6 @@ public class HomeController {
         if (member != null) {
 
             String memberId = member.getId(); // 로그인한 사용자의 Id를 memberId에 할당
-
-            LocalDate today = LocalDate.now();
         
             int countCheck = mapper.countCheck(memberId);
             session.setAttribute("countCheck", countCheck);
@@ -437,6 +487,13 @@ public class HomeController {
         }
     }
 
+    @GetMapping(value = "/storage/{videoFileName}")
+    public String playVideo(@PathVariable String videoFileName) {
+        // Process the video file name and return the view name
+        mapper.updateConfirmed(videoFileName);
+
+        return "redirect:../videos/{videoFileName}";
+    }
 
     @GetMapping(value = "/map")
     public String analytics(HttpSession session, Member member) {
@@ -448,15 +505,6 @@ public class HomeController {
         session.setAttribute("countCheck", countCheck);
 
         return "map";
-    }
-
-
-    @GetMapping(value = "/storage/{videoFileName}")
-    public String playVideo(@PathVariable String videoFileName) {
-        // Process the video file name and return the view name
-        mapper.updateConfirmed(videoFileName);
-
-        return "redirect:../videos/{videoFileName}";
     }
 
 }
