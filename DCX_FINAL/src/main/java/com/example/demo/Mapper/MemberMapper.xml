@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.Mapper.MemberMapper">
-	<select id="login" parameterType="com.example.demo.Entity.Member" resultType="com.example.demo.Entity.Member">select * from User where ID=#{id} and PW=#{pw}</select>
-	
-	<insert id="join" parameterType="com.example.demo.Entity.Member">insert into User(ID,PW,Email) values(#{id},#{pw},#{email})</insert>
-	
-	<!-- <select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId})</select> -->
+   <select id="login" parameterType="com.example.demo.Entity.Member" resultType="com.example.demo.Entity.Member">select * from USER where ID=#{id} and PW=#{pw}</select>
+   
+   <insert id="loginUser" parameterType="String">insert into LOGINUSER values(#{id},#{email})</insert>
 
-	<select id="idCheck" parameterType="String" resultType="Integer">select count(*) from User where ID = #{id}</select>
+   <delete id="logoutUser" parameterType="String">delete from LOGINUSER where ID=#{id}</delete>
 
-	<select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY confirmed ASC, RECORD_START DESC</select>
+   <select id="loginCheck" parameterType="String" resultType="Integer">select count(*) from LOGINUSER where ID = #{id}</select>
 
-	<select id="videoListtwo" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) ORDER BY RECORD_START DESC LIMIT 5</select>
+   <select id="loginUserEmail" resultType="String">select EMAIL from LOGINUSER</select>
 
-	<select id="videoListthree" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from Storage where ID = (select ID from User where ID=#{memberId}) and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} ORDER BY RECORD_START DESC LIMIT 5</select>
+   <insert id="join" parameterType="com.example.demo.Entity.Member">insert into USER(ID,PW,EMAIL) values(#{id},#{pw},#{email})</insert>
 
-	<select id="searching" parameterType="String" resultType="com.example.demo.Entity.Storage">
-		<![CDATA[
-			SELECT *
-			FROM Storage
-			WHERE ID = (SELECT ID FROM User WHERE ID=#{memberId})
-			AND record_start >= CAST(#{item_name} AS DATE)
-			AND record_start < CAST(#{item_name} AS DATE) + INTERVAL 1 DAY
-			ORDER BY RECORD_START DESC
-		]]>
-	</select>
+   <select id="idCheck" parameterType="String" resultType="Integer">select count(*) from USER where ID = #{id}</select>
 
-	<insert id="savevid" parameterType="String">INSERT INTO Storage(id, record_start, video_path)
-		SELECT #{id}, #{record_start}, #{video_path}
-		FROM dual
-		WHERE NOT EXISTS (
-			SELECT 1
-			FROM Storage
-			WHERE video_path = #{video_path}
-		)</insert>
+   <select id="videoList" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from STORAGE where ID = (select ID from USER where ID=#{id}) ORDER BY CONFIRMED ASC, RECORD_START DESC</select>
 
-	<update id="updateConfirmed" parameterType="java.lang.String">
-		UPDATE Storage
-		SET confirmed = 1
-		WHERE video_path = #{video_path}
-	</update>
+   <select id="videoListtwo" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from STORAGE where ID = (select ID from USER where ID=#{id}) ORDER BY RECORD_START DESC LIMIT 5</select>
 
-	<update id="update" parameterType="com.example.demo.Entity.Member">update User set PW=#{pw}, Email=#{email} where ID=#{id}</update>
+   <select id="videoListthree" parameterType="String" resultType="com.example.demo.Entity.Storage">select * from STORAGE where ID = (select ID from USER where ID=#{id}) and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} ORDER BY RECORD_START DESC LIMIT 5</select>
 
-	<delete id="withdraw" parameterType="String">delete from User where ID=#{id}</delete>
+   <select id="searching" parameterType="String" resultType="com.example.demo.Entity.Storage">
+      <![CDATA[
+         SELECT *
+         FROM STORAGE
+         WHERE ID = (SELECT ID FROM USER WHERE ID=#{id})
+         AND RECORD_START >= CAST(#{item_name} AS DATE)
+         AND RECORD_START < CAST(#{item_name} AS DATE) + INTERVAL 1 DAY
+         ORDER BY RECORD_START DESC
+      ]]>
+   </select>
 
-	<select id="countSmoke" parameterType="String">select count(*) from Storage where RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} AND ID=#{id}</select>
+   <insert id="savevid" parameterType="String">INSERT INTO STORAGE(ID, RECORD_START, VIDEO_PATH)
+      SELECT #{id}, #{record_start}, #{video_path}
+      FROM DUAL
+      WHERE NOT EXISTS (
+         SELECT 1
+         FROM STORAGE
+         WHERE VIDEO_PATH = #{video_path}
+      )</insert>
 
-	<select id="countCheck" parameterType="String">select count(*) from Storage where ID=#{id} and confirmed=0</select>
+   <update id="updateConfirmed" parameterType="java.lang.String">
+      UPDATE STORAGE
+      SET CONFIRMED = 1
+      WHERE VIDEO_PATH = #{video_path}
+   </update>
 
-	<select id="countCheckCalendar" parameterType="String">select count(*) from Storage where ID=#{id} and confirmed=0 and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2}</select>
+   <update id="update" parameterType="com.example.demo.Entity.Member">update USER set PW=#{pw}, EMAIL=#{email} where ID=#{id}</update>
+
+   <delete id="withdraw" parameterType="String">delete from USER where ID=#{id}</delete>
+
+   <select id="countSmoke" parameterType="String">select count(*) from STORAGE where RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2} AND ID=#{id}</select>
+
+   <select id="countCheck" parameterType="String">select count(*) from STORAGE where ID=#{id} and CONFIRMED=0</select>
+
+   <select id="countCheckCalendar" parameterType="String">select count(*) from STORAGE where ID=#{id} and CONFIRMED=0 and RECORD_START &gt;= #{date1} AND RECORD_START &lt;= #{date2}</select>
 
 </mapper>

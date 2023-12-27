@@ -148,10 +148,81 @@ aside .top {
     margin-top: 1.4rem;
 }
 
-aside .logo {
+aside .logo a {
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 0.8rem;
 }
+
+/* logo 종 움직임 */
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(to bottom,#9796f0 0%,#ff686b 100%);
+    padding: 10px;
+    width: 45px;
+    height: 45px;
+  }
+  
+  .bellWrapper {
+    font-size: 20px;
+    color: var(--color-white);
+  }
+  
+  .my-bell {
+    transform-origin: top;
+    animation: bell 2s infinite linear;
+  }
+  
+  @keyframes bell{
+    0%, 50%{
+          transform: rotate(0deg);
+      }
+    5%, 15%, 25%, 35%, 45% {
+      transform: rotate(13deg);
+    }
+    10%, 20%, 30%, 40% {
+      transform: rotate(-13deg);
+    }
+  }
+  
+  .circle {
+     width: 100px;
+        height: 80px;
+    position: absolute;
+    border: 2px solid white;
+    border-radius: 70%;
+    border-color: transparent white;
+    animation: ring 2s infinite linear both;
+  }
+  
+  .second {
+    animation-delay: .3s;
+  }
+  
+  .third {
+    animation-delay: .7s;
+  }
+  
+  @keyframes ring{
+    0%, 100% {
+      opacity: 0; 
+    }
+    
+    1% {
+      opacity: 1;
+    }
+    
+    50% {
+      width: 250px;
+      height: 250px;
+      opacity: 0;
+    }
+  
+  }
 
 aside .logo img {
     width: 2rem;
@@ -1016,3 +1087,4 @@ main .recent-video a {
     }
 
 }
+

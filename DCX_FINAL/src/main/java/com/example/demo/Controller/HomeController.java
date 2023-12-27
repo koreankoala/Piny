@@ -12,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +24,7 @@ import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Response;
 import com.example.demo.Entity.Storage;
 import com.example.demo.Mapper.MemberMapper;
+import com.example.demo.java.GoogleAuthenticationService;
 import com.example.demo.java.GoogleEmailService;
 import com.example.demo.java.NaverAuthenticationService;
 import com.example.demo.java.NaverEmailService;
@@ -48,7 +48,7 @@ public class HomeController {
     }
 
     @GetMapping(value="/login")
-    public String login(Model model) {
+    public String login() {
                                                                     
         return "login";                            
     }                                             
@@ -250,8 +250,7 @@ public class HomeController {
         }
 
     @PostMapping("/sendauthentication")
-    public String sendAuthentication(HttpSession session, @RequestParam("email") String email,
-            @RequestParam("domain") String domain) {
+    public String sendAuthentication(HttpSession session, @RequestParam("email") String email) {
 
         Random rand = new Random();
         int auth = rand.nextInt(900000) + 100000; // 0 <= auth < 10
@@ -259,15 +258,16 @@ public class HomeController {
         System.out.println(auth_String);
         session.setAttribute("auth", auth_String);
 
-        String to = email;
-        if (domain.equals("@naver.com")) {
-            NaverAuthenticationService.sendEmail(to + domain, "인증번호", "인증번호 " + auth_String + " 을(를) 입력하세요.");
+        System.out.println(email.substring(email.lastIndexOf("@") + 1));
+
+        if (email.substring(email.lastIndexOf("@") + 1).equals("naver.com")) {
+            NaverAuthenticationService.sendEmail(email, "인증번호", "인증번호 " + auth_String + " 을(를) 입력하세요.");
 
             return "login";
 
-        } else if (domain.equals("@gmail.com")) {
+        } else if (email.substring(email.lastIndexOf("@") + 1).equals("gmail.com")) {
 
-            GoogleEmailService.sendEmail(to + domain, "인증번호", "인증번호 " + auth_String + " 을(를) 입력하세요.");
+            GoogleAuthenticationService.sendEmail(email, "인증번호", "인증번호 " + auth_String + " 을(를) 입력하세요.");
 
             return "login";
         }
@@ -341,8 +341,8 @@ public class HomeController {
 
             int countCheck = mapper.countCheck(memberId);
             session.setAttribute("countCheck", countCheck);
-            
-            String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";                  
+
+             String DATA_DIRECTORY = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/videos";                  
             File dir = new File(DATA_DIRECTORY);
 
             String[] filenames = dir.list();
@@ -361,29 +361,30 @@ public class HomeController {
                 int sucornot = mapper.savevid(memberId, filename2[i].substring(107, 123), filename2[i].substring(95));
                 System.out.println(filename2[i].substring(107, 123));
                 System.out.println(filename2[i].substring(95));
-                System.out.println(sucornot);
                 // System.out.println(filename2[i]);
                 if (sucornot > 0) {
                     System.out.println("데이터베이스 업데이트 성공!");
                 }
-
             }
 
             List<Storage> result_storage = mapper.videoList(memberId);
+
             if (result_storage == null) { // Uesr에 입력한 회원 정보가 없어 로그인에 실패
                 System.out.println("데이터 베이스 불러오기 실패");
             }
             // System.out.println(result_storage);
             session.setAttribute("result_storage", result_storage);
             // return "loading_main";
+
             return "storage";
         } else {
             return "redirect:/";
         }
     }
 
+
     @GetMapping(value = "/loading")
-    public String loading(Model model) {
+    public String loading() {
 
         return "loading";
     }

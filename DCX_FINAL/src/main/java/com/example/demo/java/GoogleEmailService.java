@@ -1,11 +1,20 @@
 package com.example.demo.java;
 
 import java.util.Properties;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class GoogleEmailService {
 
@@ -36,7 +45,7 @@ public class GoogleEmailService {
             textPart.setText(content); // 내용
 
             // 이미지 파일 경로 설정
-            String imagePath = "C:/Users/smhrd/Desktop/test.png";
+            String imagePath = "C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/saved_images/frame_1.jpg.jpg";
 
             // 이미지 첨부
             MimeBodyPart imagePart = new MimeBodyPart();

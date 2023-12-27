@@ -1,6 +1,7 @@
 from flask import Flask, render_template, Response
 from flask_cors import CORS
 import cv2
+import requests
 from ultralytics import YOLO
 import time
 from datetime import datetime
@@ -19,6 +20,7 @@ record = False
 record_start_time = 0
 record_duration = 25  # seconds
 cnt_rec = 1
+email_notification_interval = 60
 
 def start_recording():
     global writer, cnt_rec
@@ -32,8 +34,42 @@ def stop_recording():
         print("Stop recording")
         writer.close()
 
+def get_session_data():
+    url = 'http://172.30.1.57:3312/session-data'  # Spring 서버의 세션 정보 API URL
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            session_data = response.json()  # JSON 형태로 받아온 세션 데이터 처리
+            # 세션 데이터 활용
+            print(session_data)
+            return session_data
+        else:
+            print('세션 데이터를 가져올 수 없음:', response.status_code)
+    except requests.exceptions.RequestException as e:
+        print('API 호출 실패:', e)
+
+def send_email(image_filename,formatted_filename):
+    url = 'http://172.30.1.57:3312/sendemail'  # Spring 서버의 URL
+    
+    try:
+        session_data = get_session_data()  # 세션 데이터 가져오기
+        if session_data:
+            session_data['image_filename'] = image_filename
+            session_data['formatted_filename'] = formatted_filename
+
+            response = requests.post(url, json=session_data)
+            response.raise_for_status()  # HTTP 오류를 일으킬 경우 예외 발생
+            print('이메일 전송 성공')
+        else:
+            print('세션 데이터 없음')
+    except requests.exceptions.RequestException as e:
+        print(session_data)
+        print('이메일 전송 실패:', e)
+
 def gen():
-    global record, record_start_time
+    global record, record_start_time, last_email_time
+    last_email_time = 0  # Initialize the last email time
+
     cap = cv2.VideoCapture(0)
 
     while True:
@@ -48,16 +84,23 @@ def gen():
         cigarette_detected = any(result.names[int(box.cls[0])] == "smoking" for result in results for box in result.boxes)
 
         if cigarette_detected:
-            print("Cigarette detected!")
+            current_time = time.time()
 
-            image_filename = f'C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/saved_images/frame_{formatted_filename}.jpg'
-            cv2.imwrite(image_filename, frame)
+            # Check if enough time has passed since the last email notification
+            if current_time - last_email_time >= email_notification_interval:
+                print("Cigarette detected!")
 
-            if not record:
-                record = True
-                record_start_time = time.time()
-                print(f"Start recording_{cnt_rec}th")
-                start_recording()
+                image_filename = 'C:/Users/korea/OneDrive/바탕 화면/DCX_Fianl_Project-main/DCX_FINAL/src/main/resources/static/saved_images/frame_1.jpg'
+                cv2.imwrite(image_filename, frame)
+
+                if not record:
+                    record = True
+                    record_start_time = current_time
+                    print(f"Start recording_{cnt_rec}th")
+                    start_recording()
+
+                send_email(image_filename, formatted_filename)
+                last_email_time = current_time  # Update the last email time
 
         if record:
             writer.append_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -78,7 +121,7 @@ def gen():
         frame_bytes = jpeg.tobytes()
 
         # Check if recording time exceeds the specified duration
-        if record and (time.time() - record_start_time) > record_duration:
+        if record and (current_time - record_start_time) > record_duration:
             record = False
             stop_recording()
 
